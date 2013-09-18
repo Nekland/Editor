@@ -85,7 +85,7 @@ window.nekland.Editor.prototype.getTemplates = function() {
             // Re-get the wrapper in the dom
             // (if not, following functions will not work as expected)
             $wrapper = $('#nekland-editor-wrapper-' + uid);
-            if (html = $element.html()) {
+            if (html = $element.val()) {
                 $wrapper.find('.nekland-editor-html').html(html);
             } else {
                 $wrapper.find('.nekland-editor-html').html('<p></p>');
