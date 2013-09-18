@@ -20,6 +20,18 @@
  */
 window.nekland.Editor.modules = [];
 
+window.nekland.Editor.prototype.initModules = function() {
+    var _i, _len;
+
+    this.modules = [];
+
+    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
+        this.modules.push(new window.nekland.Editor.modules(this.translator));
+    }
+
+    this.checkModules();
+};
+
 /**
  * Check if all modules are valid
  * Add them the translator
