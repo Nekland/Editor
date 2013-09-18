@@ -7,28 +7,15 @@
  * on the root directory of this project
  */
 
+
 /**
- * To be able to detect an error from the user,
- * here is a simulation of interface process
+ * All modules should be register in this variable.
+ *
+ * Each module have to implement theses methods:
+ *      - getTemplateBefore: return a string that will be insert before the editor
+ *      - getTemplateAfter:  return a string that will be insert after the editor
+ *      - addEvent:          simply add events on some elements of the template
  */
-Object.prototype.Implements = function(interface) { 
-    for(var property in interface)
-    {
-        if( typeof interface[property] != "string")
-            continue;
- 
-        if(this[property]==undefined || typeof this[property] != interface[property] )
-            return false;
-    }
-    return true;
-};
-
-window.nekland.Editor.ModuleInterface = {
-    getTemplateBefore: 'function',
-    getTemplateAfter:  'function',
-    addEvents:         'function'
-};
-
 window.nekland.Editor.modules = [];
 
 /**
@@ -38,7 +25,20 @@ window.nekland.Editor.modules = [];
 window.nekland.Editor.prototype.checkModules = function() {
     var _i, _len;
 
+    function checkModule (module) {
+        if (
+            typeof this.modules[i]['getTemplateBefore'] != 'function' || 
+            typeof this.modules[i]['getTemplateAfter'] != 'function' || 
+            typeof this.modules[i]['addEvents'] != 'function'
+        ) {
+            return false;
+        }
+    }
+
     for (_i = 0, _len = this.modules.length; _i < _len; i++) {
+        if (!checkModule(this.modules[i])) {
+            throw "A module does\'t work. Check if it implements all needed methods.";
+        }
         this.modules[i].translate = this.translate;
     }
 };
