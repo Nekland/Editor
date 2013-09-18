@@ -16,6 +16,7 @@
  *      - getTemplateAfter:  return a string that will be insert after the editor
  *      - addEvent:          simply add events on some elements of the template
  *      - getName:           return a string witch represent the module
+ *      - execute:           return a boolean witch say if the event should be prevent or not
  */
 window.nekland.Editor.modules = [];
 
@@ -31,21 +32,24 @@ window.nekland.Editor.prototype.checkModules = function() {
      */
     function checkModule (module) {
         if (
-            typeof this.modules[i]['getTemplateBefore'] != 'function' || 
-            typeof this.modules[i]['getTemplateAfter']  != 'function' || 
-            typeof this.modules[i]['addEvents']         != 'function' ||
-            typeof this.modules[i]['getName']           != 'function'
+            typeof module['getTemplateBefore'] != 'function' || 
+            typeof module['getTemplateAfter']  != 'function' || 
+            typeof module['addEvents']         != 'function' ||
+            typeof module['getName']           != 'function' ||
+            typeof module['execute']           != 'function'
         ) {
             return false;
         }
+
+        return true;
     }
 
-    for (_i = 0, _len = this.modules.length; _i < _len; i++) {
-        if (!checkModule(this.modules[i])) {
-            var name = this.modules[i].getName ? this.modules[i].getName : this.modules[i].toString();
+    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
+        if (!checkModule(this.modules[_i])) {
+            var name = this.modules[_i].getName ? this.modules[_i].getName() : this.modules[_i].toString();
 
-            throw "A module does\'t work. Check if the following module implements all needed methods." + name;
+            throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
         }
-        this.modules[i].translate = this.translate;
+        this.modules[_i].translate = this.translate;
     }
 };
