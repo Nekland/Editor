@@ -12,7 +12,7 @@
  *
  * If the html uses div, it should transform them to paragraph
  */
-window.nekland.Editor.prototype.p_ize = function(str) {
+window.nekland.Editor.prototype.pize = function(str) {
     str = $.trim(str);
     if (str === '' || str === '<p></p>') {
         return '<p><br /></p>';

@@ -16,10 +16,10 @@ window.nekland.Editor.prototype.execute = function ($button) {
     var command = $button.data('editor-module'),
         _i, _len, res;
 
-    for (_i = 0, _len = this.modules.length; _i < _len; i++) {
-        if (this.module.getName() == command) {
+    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
+        if (this.modules[_i].getName() == command) {
             if (this.$editor.is(':visible')) {
-                res = this.module.execute($button);
+                res = this.modules[_i].execute($button);
             }
         }
     }

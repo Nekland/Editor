@@ -40,7 +40,7 @@ window.nekland.Editor = function($domElement, _options, _templates) {
     this.$wrapper = this.templates.load($domElement, this.settings.uid);
     this.$domElement = $domElement;
     this.$editor = this.$wrapper.find('.nekland-editor-html');
-    this.$editor = this.$editor.html(this.p_ize(this.$editor.html()));
+    this.$editor = this.$editor.html(this.pize(this.$editor.html()));
     this.lastKey = null;
     this.addEvents();
 };
@@ -53,6 +53,7 @@ window.nekland.Editor = function($domElement, _options, _templates) {
  */
 window.nekland.Editor.prototype.switchEditor = function($switcher) {
 
+    // WYSIWYG to html
     if (this.$editor.is(':visible')) {
         // Notice: no need to synchronize since it's done on each keyup
         this.$editor.hide();
@@ -63,8 +64,9 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
             ucfirst: true
         }));
 
-        } else {
-        this.$editor.html(this.clearHtml(this.$domElement.val()));
+    // html to WYSIWYG
+    } else {
+        this.$editor.html(this.clearHtml(this.pize(this.$domElement.val())));
         this.$domElement.hide();
         this.$editor.show();
 
