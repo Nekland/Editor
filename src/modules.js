@@ -51,7 +51,7 @@ window.nekland.Editor.prototype.checkModule = function(module) {
         typeof module['getName']           != 'function' ||
         typeof module['execute']           != 'function'
     ) {
-        var name = module.getName ? module.getName() : module.toString();
+        var name = module.getName ? module.getName() : 'not known name';
         throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
     }
 
