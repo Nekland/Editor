@@ -9,7 +9,7 @@
 
 (function() {
     var basicModule = function(translator) {
-        this.
+        this.translator = translator;
     };
 
     basicModule.prototype.getTemplateBefore = function() {
