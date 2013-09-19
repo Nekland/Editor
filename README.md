@@ -1,6 +1,8 @@
 Nekland Editor
 ==============
 
+Warning: This script is currently in hard-development (in facts, you can talk about "heavy dev").
+
 
 Why the fuck dev one more WYSIWYG ?
 -----------------------------------
