@@ -1,4 +1,10 @@
 textarea {
-	width:  600px;
+	width:  700px;
 	height: 300px;
+	padding: 5px;
+}
+
+.nekland-editor-html {
+	border: 1px solid black;
+	padding: 5px;
 }
