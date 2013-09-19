@@ -37,8 +37,8 @@ window.nekland.Editor.prototype.getTemplates = function() {
             tpl = '<div>';
 
             // Get each module and execute the getTemplate method
-            for (_i = 0, _len = window.nekland.Editor.modules.length; _i < _len; _i++) {
-                tpl += window.nekland.Editor.modules[_i].getTemplateBefore();
+            for (_i = 0, _len = self.modules.length; _i < _len; _i++) {
+                tpl += self.modules[_i].getTemplateBefore();
             }
             tpl += '</div>';
             return tpl += this.main(size);
@@ -50,8 +50,8 @@ window.nekland.Editor.prototype.getTemplates = function() {
             var tpl = this.switchButton(), _i, _len;
 
             // Get each module and execute the getTemplate method
-            for (_i = 0, _len = window.nekland.Editor.modules.length; _i < _len; _i++) {
-                tpl += window.nekland.Editor.modules[_i].getTemplateAfter();
+            for (_i = 0, _len = self.modules.length; _i < _len; _i++) {
+                tpl += self.modules[_i].getTemplateAfter();
             }
 
             return tpl;
