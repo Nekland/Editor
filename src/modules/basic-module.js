@@ -14,10 +14,10 @@
 
     basicModule.prototype.getTemplateBefore = function() {
         var tpl;
-        tpl = '<button type="button" class="btn nekland-editor-command" data-editor-module="basic" data-editor-command="bold"><b>' + this.translator.translate('bold', {
+        tpl = '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="bold"><b>' + this.translator.translate('bold', {
             ucfirst: true
         }) + '</b></button>';
-        return tpl += '<button type="button" class="btn nekland-editor-command" data-editor-module="basic" data-editor-command="italic"><i>' + this.translator.translate('italic', {
+        return tpl += '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="italic"><i>' + this.translator.translate('italic', {
             ucfirst: true
         }) + '</i></button>';
     };

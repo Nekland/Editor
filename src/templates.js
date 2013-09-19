@@ -19,7 +19,7 @@ window.nekland.Editor.prototype.getTemplates = function() {
     var self = this;
     return {
         main: function(size) {
-            return '<div class="nekland-editor-html" style="width:' + size[0] + 'px;height:' + size[1] + 'px" contenteditable="true"></div>';
+            return '<div class="nekland-editor-html form-control" style="width:' + size[0] + 'px;height:' + size[1] + 'px" contenteditable="true"></div>';
         },
         switchButton: function(css_class) {
             if (css_class == null) {
