@@ -32,6 +32,5 @@
     basicModule.prototype.addEvents        = function() {};
     basicModule.prototype.getName          = function() { return 'basic'; };
 
-
-    window.nekland.Editor.modules.push(basicModule;
+    window.nekland.Editor.modules.push(basicModule);
 })();

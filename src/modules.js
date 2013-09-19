@@ -21,15 +21,16 @@
 window.nekland.Editor.modules = [];
 
 window.nekland.Editor.prototype.initModules = function() {
-    var _i, _len;
+    var _i, _len, _module;
 
     this.modules = [];
 
     for (_i = 0, _len = window.nekland.Editor.modules.length; _i < _len; _i++) {
+        _module = new window.nekland.Editor.modules[_i](this.translator);
 
-        this.checkModule(window.nekland.Editor.modules[_i]);
+        this.checkModule(_module);
 
-        this.modules.push(new window.nekland.Editor.modules[_i](this.translator));
+        this.modules.push(_module);
     }
 
 };
