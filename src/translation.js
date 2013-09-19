@@ -10,11 +10,11 @@
 /**
  * Return an tralator object (with the method "translate" and translations inside)
  */
-window.nekland.Editor.prototype.getTranslator = function () {
+window.nekland.Editor.prototype.getTranslator = function (lang) {
 
     // Defining the translator class
-    var translator = function () {
-        this.translations = window.nekland.lang.editor[this.settings.lang];
+    var translator = function (lang) {
+        this.translations = window.nekland.lang.editor[lang];
     };
 
     /**
@@ -47,5 +47,5 @@ window.nekland.Editor.prototype.getTranslator = function () {
     };
 
 
-    return new translator();
+    return new translator(lang);
 };

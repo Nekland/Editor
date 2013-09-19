@@ -25,43 +25,35 @@ window.nekland.Editor.prototype.initModules = function() {
 
     this.modules = [];
 
-    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
-        this.modules.push(new window.nekland.Editor.modules(this.translator));
+    for (_i = 0, _len = window.nekland.Editor.modules.length; _i < _len; _i++) {
+
+        this.checkModule(window.nekland.Editor.modules[_i]);
+
+        this.modules.push(new window.nekland.Editor.modules[_i](this.translator));
     }
 
-    this.checkModules();
 };
 
+
 /**
- * Check if all modules are valid
- * Add them the translator
+ * Check if the module implements the needeed methods
+ *
+ * @param module The module to check
+ * @return true if there was no problem
+ * @throw error if a module is not compatible
  */
-window.nekland.Editor.prototype.checkModules = function() {
-    var _i, _len;
+window.nekland.Editor.prototype.checkModule = function(module) {
 
-    /**
-     * Check if the module implements the needeed methods
-     */
-    function checkModule (module) {
-        if (
-            typeof module['getTemplateBefore'] != 'function' || 
-            typeof module['getTemplateAfter']  != 'function' || 
-            typeof module['addEvents']         != 'function' ||
-            typeof module['getName']           != 'function' ||
-            typeof module['execute']           != 'function'
-        ) {
-            return false;
-        }
-
-        return true;
+    if (
+        typeof module['getTemplateBefore'] != 'function' || 
+        typeof module['getTemplateAfter']  != 'function' || 
+        typeof module['addEvents']         != 'function' ||
+        typeof module['getName']           != 'function' ||
+        typeof module['execute']           != 'function'
+    ) {
+        var name = module.getName ? module.getName() : module.toString();
+        throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
     }
 
-    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
-        if (!checkModule(this.modules[_i])) {
-            var name = this.modules[_i].getName ? this.modules[_i].getName() : this.modules[_i].toString();
-
-            throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
-        }
-        this.modules[_i].translate = this.translate;
-    }
+    return true;
 };

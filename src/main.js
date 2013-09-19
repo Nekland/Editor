@@ -30,7 +30,10 @@ window.nekland.Editor = function($domElement, _options, _templates) {
     }, _options);
 
     // Translations loading
-    this.translations = window.nekland.lang.editor[this.settings.lang];
+    this.translator   = this.getTranslator(this.settings.lang);
+
+    // Modules loading
+    this.initModules();
 
     this.templates = $.extend(true, {}, _templates, this.getTemplates());
 
@@ -56,7 +59,7 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
         this.$domElement.val(this.clearHtml(this.$domElement.val()));
         this.$domElement.show();
 
-        $switcher.html(this.translate('swapToText', {
+        $switcher.html(this.translator.translate('swapToText', {
             ucfirst: true
         }));
 
@@ -65,7 +68,7 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
         this.$domElement.hide();
         this.$editor.show();
 
-        $switcher.html(this.translate('swapToHtml', {
+        $switcher.html(this.translator.translate('swapToHtml', {
             ucfirst: true
         }));
     }

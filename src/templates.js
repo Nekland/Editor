@@ -16,6 +16,7 @@
  * @param modules array of modules, each one has his template
  */
 window.nekland.Editor.prototype.getTemplates = function() {
+    var self = this;
     return {
         main: function(size) {
             return '<div class="nekland-editor-html" style="width:' + size[0] + 'px;height:' + size[1] + 'px" contenteditable="true"></div>';
@@ -90,8 +91,7 @@ window.nekland.Editor.prototype.getTemplates = function() {
             } else {
                 $wrapper.find('.nekland-editor-html').html('<p></p>');
             }
-            $wrapper.append(this.modals());
-            $wrapper.find('.nekland-switch-button').html(self.translate('swapToHtml', {
+            $wrapper.find('.nekland-switch-button').html(self.translator.translate('swapToHtml', {
                 ucfirst: true
             }));
 

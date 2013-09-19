@@ -27,3 +27,15 @@
 //         ucfirst: true
 //     }) + "              </button>            </div>          </div>";
 // },
+
+
+    // // Add the event on the button for link
+    // this.$wrapper.find('.open-link-modal').click($.proxy(function() {
+    //     this.saveSelection();
+
+    //     return this.$wrapper.find('.nekland-editor-link').modal('show');
+    // }, this));
+
+    // // Remove the availability of the enter key
+    // // on the input in the link modal
+    // this.$wrapper.find('.link-input').keydown(this.removeEnter);

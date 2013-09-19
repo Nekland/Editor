@@ -12,21 +12,35 @@
  * the rest of the application
  */
 (function() {
-    var myModule = function() {
-        // Noting to do in the constructor
+
+	/**
+	 * Some services injection
+	 *
+	 * @param translator The translator of the editor (usage with his "translate" method)
+	 */
+    var myModule = function(translator) {
+        this.translator = translator;
     };
 
-    myModule.prototype.getTemplateBefore = function() {
+    myModule.prototype.getTemplateBefore = function () {
         var tpl = '<button class="btn nekland-editor-command">nothing</button>'
     };
 
     // Need to be define even if there is nothing to do
     // to follow the interface
-    myModule.prototype.getTemplateAfter = function() { return ''; };
+    myModule.prototype.getTemplateAfter = function () { return ''; };
 
     // Again nothing to do since the template has the class "nekland-editor-command"
     // An event will be automatically added ;-)
-    myModule.prototype.addEvents        = function() {};
+    myModule.prototype.addEvents        = function () {};
+
+    // The name of the module
+    myModule.prototype.getName          = function () { return 'empty'; };
+
+    // execute when clicking on
+    myModule.prototype.execute			= function () {
+    	document.execCommand('something');
+    };
 
 
     window.nekland.Editor.modules.push(myModule);

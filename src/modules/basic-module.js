@@ -8,22 +8,30 @@
  */
 
 (function() {
-    var basicModule = function() {
-        // Noting to do in the constructor
+    var basicModule = function(translator) {
+        this.
     };
 
     basicModule.prototype.getTemplateBefore = function() {
         var tpl;
-        tpl = '<button type="button" class="btn nekland-editor-command" data-editor-command="bold"><b>' + this.translate('bold', {
+        tpl = '<button type="button" class="btn nekland-editor-command" data-editor-module="basic" data-editor-command="bold"><b>' + this.translator.translate('bold', {
             ucfirst: true
         }) + '</b></button>';
-        return tpl += '<button type="button" class="btn nekland-editor-command" data-editor-command="italic"><i>' + this.translate('italic', {
+        return tpl += '<button type="button" class="btn nekland-editor-command" data-editor-module="basic" data-editor-command="italic"><i>' + this.translator.translate('italic', {
             ucfirst: true
         }) + '</i></button>';
     };
+
+    basicModule.prototype.execute          = function ($button) {
+        var command = $button.data('editor-command');
+
+        document.execCommand(command);
+    };
+
     basicModule.prototype.getTemplateAfter = function() { return ''; };
     basicModule.prototype.addEvents        = function() {};
+    basicModule.prototype.getName          = function() { return 'basic'; };
 
 
-    window.nekland.Editor.modules.push(basicModule);
+    window.nekland.Editor.modules.push(basicModule;
 })();

@@ -17,5 +17,6 @@ window.nekland.lang.editor['fr'] = {
     insertLink: 'insérer le lien',
     link: 'lien',
     removeLink: 'supprimer le lien',
-    notALink: 'votre lien n\'est pas valide'
+    notALink: 'votre lien n\'est pas valide',
+    modules: {}
 };

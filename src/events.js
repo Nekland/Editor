@@ -19,22 +19,20 @@ window.nekland.Editor.prototype.addEvents = function() {
     // Added events on buttons
     this.$wrapper.find('.nekland-editor-command').click(function() {
 
-        return self.command($(this));
+        return self.execute($(this));
     });
 
     // Added event on the editor when user add any character
     this.$editor.keyup($.proxy(this.onKeyUp, this));
 
-    // Add the event on the button for link
-    this.$wrapper.find('.open-link-modal').click($.proxy(function() {
-        this.saveSelection();
+};
 
-        return this.$wrapper.find('.nekland-editor-link').modal('show');
-    }, this));
+window.nekland.Editor.prototype.addModulesEvents = function() {
+    var _i, _len;
 
-    // Remove the availability of the enter key
-    // on the input in the link modal
-    this.$wrapper.find('.link-input').keydown(this.removeEnter);
+    for (_i = 0, _len = this.modules.length; _i < _len; i++) {
+        this.modules[_i].addEvents();
+    }
 };
 
 /**
