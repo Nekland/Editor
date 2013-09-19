@@ -28,5 +28,5 @@ Nekland editor is
 
 Nekland editor is not
 
-  * Compatible with olds browsers
+  * Compatible with old browsers
   * Perfect (for now)
