@@ -17,7 +17,7 @@ window.nekland.Editor.prototype.execute = function ($button) {
         _i, _len, res;
 
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
-        if (this.modules[_i].getName() == command) {
+        if (this.modules[_i].getName() === command) {
             if (this.$editor.is(':visible')) {
                 res = $.proxy(this.modules[_i].execute, this, $button)();
             }
@@ -27,7 +27,7 @@ window.nekland.Editor.prototype.execute = function ($button) {
     this.synchronize();
 
     if (res !== undefined) {
-    	return res;
+        return res;
     }
 
     return false;

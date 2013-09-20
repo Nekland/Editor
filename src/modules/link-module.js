@@ -99,7 +99,7 @@
             }
         }
 
-        this.replaceSelection()
+        this.replaceSelection();
         document.execCommand(command, false,  link);
 
         return prevent;
