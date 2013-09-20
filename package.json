@@ -1,0 +1,41 @@
+{
+    "name": "nekland-editor",
+    "title": "NeklandEditor",
+    "description": "The WYSIWYG from Nekland.",
+    "version": "0.0.1",
+    "homepage": "https://github.com/Nekland/Editor",
+    "author": {
+        "name": "Nek",
+        "url": "http://nekland.fr"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Nekland/Editor.git"
+    },
+    "keywords": [
+        "editor",
+        "WYSIWYG",
+        "nekland"
+    ],
+    "bugs": {
+        "url": "https://github.com/Nekland/Editor/issues"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/Nekland/Editor/blob/master/LICENSE"
+        }
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-contrib-jshint":   "~0.6.3",
+        "grunt-contrib-concat":   "~v0.1.2",
+        "grunt-contrib-nodeunit": "~0.2.0",
+        "grunt-contrib-uglify":   "~0.2.2"
+    },
+    "scripts": {
+        "install": "bower install",
+        "test": "grunt"
+    }
+}
