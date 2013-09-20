@@ -22,7 +22,7 @@ window.nekland.Editor.prototype.getTemplates = function() {
             return '<div class="nekland-editor-html form-control" style="width:' + size[0] + 'px;height:' + size[1] + 'px" contenteditable="true"></div>';
         },
         switchButton: function(css_class) {
-            if (css_class == null) {
+            if (css_class === undefined) {
                 css_class = 'nekland-switch-button';
             }
             return '<a href="#" class="' + css_class + '"></a>';
@@ -86,7 +86,8 @@ window.nekland.Editor.prototype.getTemplates = function() {
             // Re-get the wrapper in the dom
             // (if not, following functions will not work as expected)
             $wrapper = $('#nekland-editor-wrapper-' + uid);
-            if (html = $element.val()) {
+            html = $.trim($element.val());
+            if (html !== '') {
                 $wrapper.find('.nekland-editor-html').html(html);
             } else {
                 $wrapper.find('.nekland-editor-html').html('<p></p>');

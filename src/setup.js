@@ -12,12 +12,12 @@
 // Setting up namespaces
 
 // Create nekland namespace if doesn't exists
-if (window.nekland == null) {
-	window.nekland = {};
+if (window.nekland === undefined) {
+    window.nekland = {};
 }
 // Create nekland lang namespace if doesn't exists
-if (window.nekland.lang == null) {
-	window.nekland.lang = {};
+if (window.nekland.lang === undefined) {
+    window.nekland.lang = {};
 }
 // Create lang editor namespace
 window.nekland.lang.editor = {};

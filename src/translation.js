@@ -27,19 +27,19 @@ window.nekland.Editor.prototype.getTranslator = function (lang) {
         var res;
 
         // Default value for options is {}
-        if (options == null) {
+        if (options === undefined) {
             options = {};
         }
 
         // Check if the translation exists
-        if (this.translations[str] != null) {
+        if (this.translations[str] !== undefined) {
             res = this.translations[str];
         } else {
             throw new Error('Translation missing');
         }
 
         // Execute options
-        if (options.ucfirst != null) {
+        if (options.ucfirst !== undefined) {
             res = res.charAt(0).toUpperCase() + res.slice(1);
         }
 

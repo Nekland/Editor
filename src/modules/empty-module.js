@@ -13,17 +13,17 @@
  */
 (function() {
 
-	/**
-	 * Some services injection
-	 *
-	 * @param translator The translator of the editor (usage with his "translate" method)
-	 */
+    /**
+     * Some services injection
+     *
+     * @param translator The translator of the editor (usage with his "translate" method)
+     */
     var myModule = function(translator) {
         this.translator = translator;
     };
 
     myModule.prototype.getTemplateBefore = function () {
-        var tpl = '<button class="btn nekland-editor-command">nothing</button>'
+        var tpl = '<button class="btn nekland-editor-command">nothing</button>';
     };
 
     // Need to be define even if there is nothing to do
@@ -38,8 +38,8 @@
     myModule.prototype.getName          = function () { return 'empty'; };
 
     // execute when clicking on
-    myModule.prototype.execute			= function () {
-    	document.execCommand('something');
+    myModule.prototype.execute          = function () {
+        document.execCommand('something');
     };
 
 

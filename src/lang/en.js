@@ -7,7 +7,7 @@
  * on the root directory of this project
  */
 
-window.nekland.lang.editor['en'] = {
+window.nekland.lang.editor.en = {
     swapToText: 'swap to text',
     swapToHtml: 'swap to html',
     italic: 'italic',

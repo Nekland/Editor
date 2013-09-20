@@ -46,11 +46,11 @@ window.nekland.Editor.prototype.initModules = function() {
 window.nekland.Editor.prototype.checkModule = function(module) {
 
     if (
-        typeof module['getTemplateBefore'] != 'function' || 
-        typeof module['getTemplateAfter']  != 'function' || 
-        typeof module['addEvents']         != 'function' ||
-        typeof module['getName']           != 'function' ||
-        typeof module['execute']           != 'function'
+        typeof module.getTemplateBefore != 'function' || 
+        typeof module.getTemplateAfter  != 'function' || 
+        typeof module.addEvents         != 'function' ||
+        typeof module.getName           != 'function' ||
+        typeof module.execute           != 'function'
     ) {
         var name = module.getName ? module.getName() : 'not known name';
         throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';

@@ -14,11 +14,11 @@
  */
 window.nekland.Editor = function($domElement, _options, _templates) {
     // Constructor
-    if (_options == null) {
+    if (_options !== undefined) {
         _options = {};
     }
 
-    if (_templates == null) {
+    if (_templates !== undefined) {
         _templates = {};
     }
 

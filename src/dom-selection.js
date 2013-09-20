@@ -8,9 +8,9 @@
  */
 
 window.nekland.Editor.prototype.getSelection = function() {
-    if (window.getSelection != null) {
+    if (window.getSelection !== null) {
         return window.getSelection();
-    } else if (document.getSelection != null) {
+    } else if (document.getSelection !== null) {
         return document.getSelection();
     } else {
         return document.selection.createRange();
@@ -23,14 +23,16 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
         focn = orgn;
     }
     if (foco === null) {
-  foco = orgo;
+        foco = orgo;
     }
     sel = this.getSelection();
     if (!sel) {
+
         return;
     }
     if (sel.collapse && sel.extend) {
         sel.collapse(orgn, orgo);
+
         return sel.extend(focn, foco);
     } else {
         r = document.createRange();
@@ -39,13 +41,14 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
         try {
             sel.removeAllRanges();
         } catch (_error) {}
+
         return sel.addRange(r);
     }
 };
 
 
 window.nekland.Editor.prototype.getCurrentNode = function() {
-    if (window.getSelection != null) {
+    if (window.getSelection !== null) {
         return this.getSelectedNode().parentNode;
     }
 };
@@ -56,14 +59,14 @@ window.nekland.Editor.prototype.getParentNode = function() {
 
 window.nekland.Editor.prototype.getSelectedNode = function() {
     var s;
-    if (window.getSelection != null) {
+    if (window.getSelection !== null) {
         s = window.getSelection();
         if (s.rangeCount > 0) {
             return this.getSelection().getRangeAt(0).commonAncestorContainer;
         } else {
             return false;
         }
-    } else if (document.selection != null) {
+    } else if (document.selection !== null) {
         return this.getSelection();
     }
 };
@@ -97,7 +100,7 @@ window.nekland.Editor.prototype.insertNodeAtCaret = function(node) {
 };
 
 window.nekland.Editor.prototype.replaceSelection = function() {
-    if ((this.savedSel != null) && (this.savedSelObj != null) && this.savedSel[0].tagName !== 'BODY') {
+    if ((this.savedSel !== null) && (this.savedSelObj !== null) && this.savedSel[0].tagName !== 'BODY') {
         if ($(this.savedSel[0]).closest('.nekland-editor-html').size() === 0) {
             return this.$editor.focus();
         } else {
