@@ -19,12 +19,16 @@ window.nekland.Editor.prototype.execute = function ($button) {
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
         if (this.modules[_i].getName() == command) {
             if (this.$editor.is(':visible')) {
-                res = this.modules[_i].execute($button);
+                res = $.proxy(this.modules[_i].execute, this, $button)();
             }
         }
     }
 
     this.synchronize();
 
-    return res || false;
+    if (res !== undefined) {
+    	return res;
+    }
+
+    return false;
 };

@@ -25,13 +25,15 @@ window.nekland.Editor.prototype.addEvents = function() {
     // Added event on the editor when user add any character
     this.$editor.keyup($.proxy(this.onKeyUp, this));
 
+    this.addModulesEvents();
+
 };
 
 window.nekland.Editor.prototype.addModulesEvents = function() {
     var _i, _len;
 
-    for (_i = 0, _len = this.modules.length; _i < _len; i++) {
-        this.modules[_i].addEvents();
+    for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
+        $.proxy(this.modules[_i].addEvents, this)();
     }
 };
 

@@ -126,3 +126,9 @@ window.nekland.Editor.prototype.getFocus = function() {
     }
     return [sel.focusNode, sel.focusOffset];
 };
+
+window.nekland.Editor.prototype.saveSelection = function() {
+    this.$editor.focus();
+    this.savedSel = this.getOrigin();
+    return this.savedSelObj = this.getFocus();
+};
