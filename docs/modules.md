@@ -62,9 +62,9 @@ You can find this module next to other modules in the folder `src/modules`.
     };
 
     myModule.prototype.getTemplateBefore = function () {
-        var tpl = '<button class="btn nekland-editor-command">' +
-        this.translator.translate('bold', { ucfirst: true }) +
-        '</button>';
+        var tpl = '<button class="btn btn-default nekland-editor-command" data-editor-module="' + this.getName() + '">' +
+            this.translator.translate('someKey', { ucfirst: true }) +
+            '</button>';
 
         return tpl;
     };

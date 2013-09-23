@@ -23,8 +23,8 @@
     };
 
     myModule.prototype.getTemplateBefore = function () {
-        var tpl = '<button class="btn btn-default nekland-editor-command" data-editor-module="empty">' +
-            this.translator.translate('bold', { ucfirst: true }) +
+        var tpl = '<button class="btn btn-default nekland-editor-command" data-editor-module="' + this.getName() + '">' +
+            this.translator.translate('someKey', { ucfirst: true }) +
             '</button>';
 
         return tpl;
