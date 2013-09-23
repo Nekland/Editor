@@ -31,6 +31,8 @@ Example
 
 Here is a basic module definition with some precisions :) .
 
+You can find this module next to other modules in the folder `src/modules`.
+
 ```javascript
 /**
  * Creation of a module in a closure to not disturb
