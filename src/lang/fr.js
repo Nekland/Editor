@@ -18,5 +18,5 @@ window.nekland.lang.editor.fr = {
     link: 'lien',
     removeLink: 'supprimer le lien',
     notALink: 'votre lien n\'est pas valide',
-    modules: {}
+    alignment: 'alignement'
 };

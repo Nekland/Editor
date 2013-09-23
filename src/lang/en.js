@@ -18,5 +18,5 @@ window.nekland.lang.editor.en = {
     link: 'link',
     removeLink: 'remove link',
     notALink: 'your link is not a valid link',
-    modules: {}
+    alignment: 'alignment'
 };
