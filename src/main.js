@@ -37,7 +37,8 @@ window.nekland.Editor = function($domElement, _options, _templates) {
     this.initModules();
     this.translator.addModuleTranslations(this.modules);
 
-    this.templates = $.extend(true, {}, _templates, this.getTemplates());
+    // Recurcive/Create new object
+    this.templates = $.extend(true, {}, this.getTemplates(), _templates);
 
     this.$wrapper = this.templates.load($domElement, this.settings.uid);
     this.$domElement = $domElement;
