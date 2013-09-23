@@ -23,7 +23,11 @@
     };
 
     myModule.prototype.getTemplateBefore = function () {
-        var tpl = '<button class="btn nekland-editor-command">nothing</button>';
+        var tpl = '<button class="btn nekland-editor-command">' +
+        this.translator.translate('bold', { ucfirst: true }) +
+        '</button>';
+
+        return tpl;
     };
 
     // Need to be define even if there is nothing to do

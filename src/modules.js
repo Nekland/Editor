@@ -13,7 +13,6 @@
  *
  * Each module have to implement theses methods:
  *      - getTemplateBefore: return a string that will be insert before the editor
- *      - getTemplateAfter:  return a string that will be insert after the editor
  *      - addEvent:          simply add events on some elements of the template
  *      - getName:           return a string witch represent the module
  *      - execute:           return a boolean witch say if the event should be prevent or not
@@ -46,14 +45,12 @@ window.nekland.Editor.prototype.initModules = function() {
 window.nekland.Editor.prototype.checkModule = function(module) {
 
     if (
-        typeof module.getTemplateBefore != 'function' || 
-        typeof module.getTemplateAfter  != 'function' || 
-        typeof module.addEvents         != 'function' ||
+        typeof module.getTemplateBefore != 'function' ||
         typeof module.getName           != 'function' ||
         typeof module.execute           != 'function'
     ) {
         var name = module.getName ? module.getName() : 'not known name';
-        throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
+        throw 'A module does\'t work. Check if the following module implements all needed methods: "' + name + '".';
     }
 
     return true;

@@ -51,7 +51,9 @@ window.nekland.Editor.prototype.getTemplates = function() {
 
             // Get each module and execute the getTemplate method
             for (_i = 0, _len = self.modules.length; _i < _len; _i++) {
-                tpl += self.modules[_i].getTemplateAfter();
+                if (self.modules[_i].getTemplateAfter !== undefined && typeof self.modules[_i].getTemplateAfter === 'function') {
+                    tpl += self.modules[_i].getTemplateAfter();
+                }
             }
 
             return tpl;
