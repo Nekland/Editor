@@ -24,7 +24,7 @@ Nekland editor is
   * Easy to use
   * Easy to extends
   * Easy to improve
-  * Documented (soon, we promise)
+  * Documented (see docs folder)
 
 Nekland editor is not
 

@@ -56,9 +56,12 @@ window.nekland.Editor = function($domElement, _options, _templates) {
     this.translator   = this.getTranslator(this.settings.lang);
 
     // Modules loading
+    // Note: the following operation needs the translator to inject it
     this.initModules();
+    this.translator.addModuleTranslations(this.modules);
 
-    this.templates = $.extend(true, {}, _templates, this.getTemplates());
+    // Recurcive/Create new object
+    this.templates = $.extend(true, {}, this.getTemplates(), _templates);
 
     this.$wrapper = this.templates.load($domElement, this.settings.uid);
     this.$domElement = $domElement;
@@ -195,7 +198,9 @@ window.nekland.Editor.prototype.getTemplates = function() {
 
             // Get each module and execute the getTemplate method
             for (_i = 0, _len = self.modules.length; _i < _len; _i++) {
-                tpl += self.modules[_i].getTemplateAfter();
+                if (self.modules[_i].getTemplateAfter !== undefined && typeof self.modules[_i].getTemplateAfter === 'function') {
+                    tpl += self.modules[_i].getTemplateAfter();
+                }
             }
 
             return tpl;
@@ -259,7 +264,6 @@ window.nekland.Editor.prototype.getTemplates = function() {
  *
  * Each module have to implement theses methods:
  *      - getTemplateBefore: return a string that will be insert before the editor
- *      - getTemplateAfter:  return a string that will be insert after the editor
  *      - addEvent:          simply add events on some elements of the template
  *      - getName:           return a string witch represent the module
  *      - execute:           return a boolean witch say if the event should be prevent or not
@@ -292,14 +296,12 @@ window.nekland.Editor.prototype.initModules = function() {
 window.nekland.Editor.prototype.checkModule = function(module) {
 
     if (
-        typeof module.getTemplateBefore != 'function' || 
-        typeof module.getTemplateAfter  != 'function' || 
-        typeof module.addEvents         != 'function' ||
+        typeof module.getTemplateBefore != 'function' ||
         typeof module.getName           != 'function' ||
         typeof module.execute           != 'function'
     ) {
         var name = module.getName ? module.getName() : 'not known name';
-        throw 'A module does\'t work. Check if the following module implements all needed methods: \"' + name + '"';
+        throw 'A module does\'t work. Check if the following module implements all needed methods: "' + name + '".';
     }
 
     return true;
@@ -339,7 +341,9 @@ window.nekland.Editor.prototype.addModulesEvents = function() {
     var _i, _len;
 
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
-        $.proxy(this.modules[_i].addEvents, this)();
+        if (this.modules[_i].addEvents !== undefined && typeof this.modules[_i].addEvents === 'function') {
+            $.proxy(this.modules[_i].addEvents, this)();
+        }
     }
 };
 
@@ -512,7 +516,29 @@ window.nekland.Editor.prototype.getTranslator = function (lang) {
 
     // Defining the translator class
     var translator = function (lang) {
+    
         this.translations = window.nekland.lang.editor[lang];
+    };
+
+    /**
+     * Add module translations to current translations
+     * (the process merge them)
+     *
+     * @param modules An array of modules
+     */
+    translator.prototype.addModuleTranslations = function (modules) {
+        var _i, _len, _translations;
+
+        // Load translations from modules
+        for (_i = 0, _len = modules.length; _i < _len; _i++) {
+            if (modules[_i].getTranslations !== undefined && typeof modules[_i].getTranslations == 'function') {
+                _translations = modules[_i].getTranslations()[lang];
+
+                if (_translations !== undefined) {
+                    this.translations = $.extend({}, this.translations, _translations);
+                }
+            }
+        }
     };
 
     /**
@@ -651,8 +677,6 @@ window.nekland.lang.editor.en = {
         document.execCommand(command);
     };
 
-    basicModule.prototype.getTemplateAfter = function() { return ''; };
-    basicModule.prototype.addEvents        = function() {};
     basicModule.prototype.getName          = function() { return 'basic'; };
 
     window.nekland.Editor.modules.push(basicModule);
