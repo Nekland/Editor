@@ -19,6 +19,18 @@ You can also implements some other methods that will be automatically call:
 * `addEvents`: this method doesn't return anything but you can add events using the context of the editor
 * `getTranslations`: have to return an object that contains translations
 
+### Important things about **template**
+
+Since the editor add automatically link to buttons, there are some requirements in your template.
+* Each button that trigger the execution of a command must have the attribute `data-editor-module="{nameOfYourModule}"`
+* On the same way, it must have the class `nekland-editor-command`
+
+Here is an example:
+
+```html
+<button class="btn btn-default nekland-editor-command" data-editor-module="{nameOfYourModule}"></button>
+```
+
 Register it
 -----------
 
