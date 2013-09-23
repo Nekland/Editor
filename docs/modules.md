@@ -12,7 +12,7 @@ What you need to do
 If you create a new module, it must implement the following methods:
 * `getTemplateBefore`: have to return a string (Usually he button you want to add on the editor)
 * `getName`: have to return a string (as simple as possible: the name of your module)
-* `execute`: you have to "say" what your module does on activation (using the context of the editor)
+* `execute`: you have to "say" what your module does on activation (using the context of the editor), return true if you don't want to prevent following events
 
 You can also implements some other methods that will be automatically call:
 * `getTemplateAfter`: have to return an html string (that can be empty) witch will be added to the html after the editor
@@ -67,6 +67,7 @@ Here is a basic module definition with some precisions :) .
     myModule.prototype.getName          = function () { return 'empty'; };
 
     // execute when clicking on
+    // return "true" to don't prevent events
     myModule.prototype.execute          = function () {
         document.execCommand('something');
     };
