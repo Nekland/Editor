@@ -18,5 +18,11 @@ window.nekland.lang.editor.en = {
     link: 'link',
     removeLink: 'remove link',
     notALink: 'your link is not a valid link',
-    alignment: 'alignment'
+
+    // Alignment module
+    alignment:        'alignment',
+    alignmentLeft:    'alignment to the left',
+    alignmentRight:   'alignment to the right',
+    alignmentCenter:  'alignment to the center',
+    alignmentJustify: 'justify alignment'
 };

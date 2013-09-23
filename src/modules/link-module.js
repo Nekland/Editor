@@ -17,7 +17,7 @@
 
         tpl += '<a class="btn btn-default dropdown-toggle link-modal" data-toggle="dropdown" href="#">' + this.translator.translate('link', {
             ucfirst: true
-        }) + '<span class="caret"></span></a>';
+        }) + ' <span class="caret"></span></a>';
 
         tpl += '<ul class="dropdown-menu">';
 
@@ -26,7 +26,7 @@
             ucfirst: true
         }) + '</a></li>';
 
-        tpl += '<li><a href="#" class="nekland-editor-command" data-editor-command="unlink" data-editor-module="link" data-prevent="no">' + this.translator.translate('removeLink', {
+        tpl += '<li><a href="#" class="nekland-editor-command" data-editor-command="unlink" data-editor-module="link">' + this.translator.translate('removeLink', {
             ucfirst: true
         }) + '</a></li>';
 
