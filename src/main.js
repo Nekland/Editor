@@ -33,7 +33,9 @@ window.nekland.Editor = function($domElement, _options, _templates) {
     this.translator   = this.getTranslator(this.settings.lang);
 
     // Modules loading
+    // Note: the following operation needs the translator to inject it
     this.initModules();
+    this.translator.addModuleTranslations(this.modules);
 
     this.templates = $.extend(true, {}, _templates, this.getTemplates());
 

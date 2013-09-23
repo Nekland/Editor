@@ -14,7 +14,29 @@ window.nekland.Editor.prototype.getTranslator = function (lang) {
 
     // Defining the translator class
     var translator = function (lang) {
+    
         this.translations = window.nekland.lang.editor[lang];
+    };
+
+    /**
+     * Add module translations to current translations
+     * (the process merge them)
+     *
+     * @param modules An array of modules
+     */
+    translator.prototype.addModuleTranslations = function (modules) {
+        var _i, _len, _translations;
+
+        // Load translations from modules
+        for (_i = 0, _len = modules.length; _i < _len; _i++) {
+            if (modules[_i].getTranslations !== undefined && typeof modules[_i].getTranslations == 'function') {
+                _translations = modules[_i].getTranslations()[lang];
+
+                if (_translations !== undefined) {
+                    this.translations = $.extend({}, this.translations, _translations);
+                }
+            }
+        }
     };
 
     /**

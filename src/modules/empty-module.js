@@ -42,6 +42,17 @@
         document.execCommand('something');
     };
 
+    // Notice: this method is not needed
+    myModule.prototype.getTranslations  = function () {
+        return {
+            'en': {
+                'someKey': 'A random translation'
+            },
+            'fr': {
+                'someKey': 'Une traduction aléatoire'
+            }
+        };
+    };
 
     window.nekland.Editor.modules.push(myModule);
 })();
