@@ -31,4 +31,4 @@ Nekland editor is not
   * Compatible with old browsers
   * Perfect (for now)
 
-![Screenshot](https://raw.github.com/Nekland/Editor/master/logo.png)
+![Screenshot](https://raw.github.com/Nekland/Editor/master/screenshot.png)
