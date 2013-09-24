@@ -35,14 +35,31 @@
 
     listModule.prototype.execute          = function ($button) {
         var command  = $button.data('editor-command'),
-            removeLi = false;
+            removeLi = false,
+            $node,
+            html,
+            $p;
 
         // When the current node is a li
         // we have to check 
-
-
+        if (this.getCurrentNode().tagName === 'LI') {
+            removeLi = true;
+        }
 
         document.execCommand(command);
+
+        if (removeLi) {
+            $node = $(this.getCurrentNode());
+
+            if ($node.get(0).tagName === 'SPAN') {
+                $p = $('<p>').append($node.clone().get(0).childNodes);
+                // Replace the div with the p element
+                $node.replaceWith($p);
+                // Add a br for not having empty element
+                $p.html('<br />');
+                this.setSelection($p[0], 0, $p[0], 0);
+            }
+        }
 
         return true;
     };
