@@ -33,5 +33,9 @@ window.nekland.lang.editor.fr = {
     formatH2:     'titre 2',
     formatH3:     'titre 3',
     formatH4:     'titre 4',
-    formatH5:     'titre 5'
+    formatH5:     'titre 5',
+
+    // List module
+    list:       'liste',
+    normalList: 'liste'
 };

@@ -23,21 +23,25 @@
         tpl += '<ul class="dropdown-menu">';
 
         tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyLeft">' +
+            '<span class="glyphicon glyphicon-align-left"></span> ' +
             this.translator.translate('alignmentLeft', {
                 ucfirst: true
             }) + '</a></li>';
 
         tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyRight">' +
+            '<span class="glyphicon glyphicon-align-right"></span> ' +
             this.translator.translate('alignmentRight', {
                 ucfirst: true
             }) + '</a></li>';
 
         tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyCenter">' +
+            '<span class="glyphicon glyphicon-align-center"></span> ' +
             this.translator.translate('alignmentCenter', {
                 ucfirst: true
             }) + '</a></li>';
 
         tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyFull">' +
+            '<span class="glyphicon glyphicon-align-justify"></span> ' +
             this.translator.translate('alignmentJustify', {
                 ucfirst: true
             }) + '</a></li>';

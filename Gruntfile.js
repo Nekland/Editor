@@ -30,8 +30,11 @@ module.exports = function(grunt) {
                     'src/tils.js',
                     'src/jquery-plugin.js',
                     'src/lang/en.js',
-                    'src/modules/*.js',
-                    '!src/modules/empty-module.js'
+                    'src/modules/basic-module.js',
+                    'src/modules/link-module.js',
+                    'src/modules/align-module.js',
+                    'src/modules/format-module.js',
+                    'src/modules/list-module.js'
                 ],
                 dest: 'release/nekland-editor.js'
             }
