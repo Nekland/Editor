@@ -46,15 +46,27 @@ window.nekland.Editor.prototype.addModulesEvents = function() {
  * @param event
  */
 window.nekland.Editor.prototype.onKeyUp = function(event) {
+    var key = event.keyCode || event.which;
+
+    if (key === 13) {
+
+        // Bugfix for chrome/webkit
+        // It doesn't pize the new line
+        if (this.compatibility('webkit')) {
+            this.formatNewLine();
+        }
+        // TODO: convert links on the last line
+    }
+
     this.synchronize();
 };
 
 /**
  * Prevent enter
- * @param e Event
+ * @param event Event
  */
-window.nekland.Editor.prototype.removeEnter = function(e) {
-    if (e.which === 13) {
-        return e.preventDefault();
+window.nekland.Editor.prototype.removeEnter = function(event) {
+    if (event.which === 13) {
+        return event.preventDefault();
     }
 };
