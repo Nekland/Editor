@@ -9,6 +9,7 @@ Changelog
 New Features:
 * Added alignment module
 * Added format module
+* Added list module
 * Css file for buttons formating (see release folder)
 
 Bugfix:
