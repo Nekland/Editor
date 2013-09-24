@@ -17,9 +17,9 @@ window.nekland.Editor.prototype.addEvents = function() {
     $switcher.click($.proxy(this.switchEditor, this, $switcher));
 
     // Added events on buttons
-    this.$wrapper.find('.nekland-editor-command').click(function() {
+    this.$wrapper.find('.nekland-editor-command').click(function(e) {
 
-        return self.execute($(this));
+        return self.execute($(this), e);
     });
 
     // Added event on the editor when user add any character

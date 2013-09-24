@@ -12,7 +12,7 @@
  *
  * @param $button A jQuery object of the clicked button
  */
-window.nekland.Editor.prototype.execute = function ($button) {
+window.nekland.Editor.prototype.execute = function ($button, event) {
     var command = $button.data('editor-module'),
         _i, _len, res;
 

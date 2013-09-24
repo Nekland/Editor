@@ -1,0 +1,23 @@
+.dropdown-menu>li>a.nekland-editor-formath1,
+.dropdown-menu>li>a.nekland-editor-formath2,
+.dropdown-menu>li>a.nekland-editor-formath3,
+.dropdown-menu>li>a.nekland-editor-formath4,
+.dropdown-menu>li>a.nekland-editor-formath5 {
+    font-weight: bold;
+}
+
+a.nekland-editor-formath1 {
+    font-size: 28px;
+}
+a.nekland-editor-formath2 {
+    font-size: 25px;
+}
+a.nekland-editor-formath3 {
+    font-size: 22px;
+}
+a.nekland-editor-formath4 {
+    font-size: 19px;
+}
+a.nekland-editor-formath5 {
+    font-size: 16px;
+}

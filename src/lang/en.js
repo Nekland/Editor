@@ -24,5 +24,14 @@ window.nekland.lang.editor.en = {
     alignmentLeft:    'alignment to the left',
     alignmentRight:   'alignment to the right',
     alignmentCenter:  'alignment to the center',
-    alignmentJustify: 'justify alignment'
+    alignmentJustify: 'justify alignment',
+
+    // Format module
+    format:       'format',
+    formatNormal: 'normal text',
+    formatH1:     'title 1',
+    formatH2:     'title 2',
+    formatH3:     'title 3',
+    formatH4:     'title 4',
+    formatH5:     'title 5'
 };

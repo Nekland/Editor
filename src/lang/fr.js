@@ -24,5 +24,14 @@ window.nekland.lang.editor.fr = {
     alignmentLeft:    'alignement à gauche',
     alignmentRight:   'alignement à droite',
     alignmentCenter:  'alignement au milieu',
-    alignmentJustify: 'alignement justifié'
+    alignmentJustify: 'alignement justifié',
+
+    // Format module
+    format:       'format',
+    formatNormal: 'texte normal',
+    formatH1:     'titre 1',
+    formatH2:     'titre 2',
+    formatH3:     'titre 3',
+    formatH4:     'titre 4',
+    formatH5:     'titre 5'
 };
