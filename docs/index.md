@@ -16,3 +16,10 @@ Using it
 ```javascript
 $('#textarea').neklandEditor();
 ```
+
+
+What using with
+---------------
+
+Even if nekland editor send html as clean as possible, we recommand to uses a html cleaner
+like [HTMLPurifier](http://htmlpurifier.org/).
