@@ -2,7 +2,7 @@ Nekland Editor
 ==============
 
 Warning: This script is currently in hard-development (in facts, you can talk about "heavy dev").
-
+![Nekland Editor Logo](https://raw.github.com/Nekland/Editor/master/logo.png)
 
 Why the fuck dev one more WYSIWYG ?
 -----------------------------------
@@ -30,3 +30,5 @@ Nekland editor is not
 
   * Compatible with old browsers
   * Perfect (for now)
+
+![Screenshot](https://raw.github.com/Nekland/Editor/master/logo.png)

@@ -1,6 +1,21 @@
 Changelog
 =========
 
+0.0.3:
+------
+
+**Still alpha version**
+
+New Features:
+* Added alignment module
+* Added format module
+* Css file for buttons formating (see release folder)
+
+Bugfix:
+* Chrome generate now clean code =)
+* Fix little mistake in the DOM API of the editor
+* Improved documentation
+
 0.0.2:
 ------
 
