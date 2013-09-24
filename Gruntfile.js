@@ -26,6 +26,7 @@ module.exports = function(grunt) {
                     'src/dom-selection.js',
                     'src/translation.js',
                     'src/string-tools.js',
+                    'src/compatibility.js',
                     'src/tils.js',
                     'src/jquery-plugin.js',
                     'src/lang/en.js',

@@ -33,4 +33,4 @@ window.nekland.Editor.prototype.compatibility = function(browser) {
     }
 
     return this.browser == browser;
-}
+};
