@@ -27,7 +27,7 @@ module.exports = function(grunt) {
                     'src/translation.js',
                     'src/string-tools.js',
                     'src/compatibility.js',
-                    'src/tils.js',
+                    'src/utils.js',
                     'src/jquery-plugin.js',
                     'src/lang/en.js',
                     'src/modules/basic-module.js',
