@@ -48,16 +48,20 @@
 
         document.execCommand(command);
 
-        if (removeLi) {
-            $node = $(this.getCurrentNode());
+        if (!removeLi) {
+            
+            // Getting the supposed UL
+            $node = $(this.getParentNode());
 
-            if ($node.get(0).tagName === 'SPAN') {
-                $p = $('<p>').append($node.clone().get(0).childNodes);
-                // Replace the div with the p element
-                $node.replaceWith($p);
-                // Add a br for not having empty element
-                $p.html('<br />');
-                this.setSelection($p[0], 0, $p[0], 0);
+            // supposed the "p"
+            $p = $node.parent();
+
+            // if it's really a p
+            if ($p.get(0).tagName === 'P') {
+                // Add content of the p at the end of $editor
+                this.$editor.append($node);
+                $p.remove();
+                this.replaceCarretOn($node);
             }
         }
 

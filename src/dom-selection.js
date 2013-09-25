@@ -176,3 +176,13 @@ window.nekland.Editor.prototype.formatNewLine = function() {
         }
     }
 };
+
+/**
+ * Replace the carret at the start
+ * of the element specified
+ *
+ * @param $element A jQuery object in the $editor
+ */
+window.nekland.Editor.prototype.replaceCarretOn = function($element) {
+    this.setSelection($element[0], 0, $element[0], 0);
+};
