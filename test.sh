@@ -20,16 +20,20 @@
 # Requirements for unit tests
 #	- nodejs
 
+PROJECT_HOME=$PWD
 
 # Unit testing
 if [ "$1" = "all" ] || [ "$1" = "unit" ]; then
 	echo "No unit tests for now.\n\n"
 fi
 
+cd $PROJECT_HOME
+
 # Functionnal tests
 if [ "$1" = "all" ] || [ "$1" = "functionnal" ]; then
+	cd tests/casper/
 	echo "Launching functionnal tests..."
-	casperjs test ./tests/casper_test.js $PWD
+	casperjs test $PWD
 fi
 
 if [ "$1" = "" ]; then
