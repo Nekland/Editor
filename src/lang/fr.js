@@ -37,5 +37,6 @@ window.nekland.lang.editor.fr = {
 
     // List module
     list:       'liste',
-    normalList: 'liste'
+    normalList: 'liste',
+    removeList: 'terminer la liste'
 };
