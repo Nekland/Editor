@@ -46,3 +46,15 @@ grunt
 ```
 
 Compiled files are available in the release directory.
+
+
+Test me
+-------
+
+To launch functionnals tests you will need to install phantomjs and casperjs.
+
+Then just launch like that:
+
+```bash
+./test.sh all
+```
