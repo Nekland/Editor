@@ -13,12 +13,10 @@ casper.test.begin('Are nekland editor basics working', 1, function suite(test) {
         	keepFocus: true
         });
         this.click('.nekland-switch-button');
-
     });
 
     casper.then(function() {
-
-        //test.assertSelectorHasText('#textarea', '<p>Hello world</p>');
+        test.assertEquals(this.getFormValues('form').content, '<p>Hello world</p>');
     });
 
     casper.run(function() {
