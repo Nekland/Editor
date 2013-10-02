@@ -62,8 +62,12 @@
 
         return tpl += '</div></div></div></div>';
     };
+
+    /**
+     * Add events for open modal on click on link
+     *
+     */
     linkModule.prototype.addEvents        = function() {
-        //this.$wrapper.find('.link-modal').modal('hide');
         this.$wrapper.find('.open-link-modal').click($.proxy(function() {
             this.saveSelection();
 
@@ -72,6 +76,12 @@
         this.$wrapper.find('.link-input').keydown(this.removeEnter);
     };
 
+    /**
+     * Execute the creation or remove of a link
+     *
+     * @param $button jQuery object of the button clicked
+     * @return boolean true if there is a link addition (letting the checkbox close) flase in other cases
+     */
     linkModule.prototype.execute          = function ($button) {
         var command = $button.data('editor-command'),
             $modal   = $('#link-modal'),
