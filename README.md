@@ -32,3 +32,17 @@ Nekland editor is not
   * Perfect (for now)
 
 ![Screenshot](https://raw.github.com/Nekland/Editor/master/screenshot.png)
+
+
+Compile me
+----------
+
+There is a simple way to compile this project:
+
+```bash
+cd Editor
+npm install
+grunt
+```
+
+Compiled files are available in the release directory.
