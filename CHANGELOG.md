@@ -15,7 +15,10 @@ New Features:
 Bugfix:
 * Chrome generate now clean code =)
 * Fix little mistake in the DOM API of the editor
+
+Other:
 * Improved documentation
+* Started tests support
 
 0.0.2:
 ------
