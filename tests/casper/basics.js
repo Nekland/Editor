@@ -1,16 +1,13 @@
 var demo = 'file:///' + casper.cli.get(0) + '/../../demo/index.html',
-	utils = require('utils');
+    utils = require('utils');
 
 casper.test.begin('Are nekland editor basics working', 1, function suite(test) {
 
-	var $editor;
+    var $editor;
 
     casper.start(demo, function() {
-    	//$editor = $('editor');
-        //this.fill('.nekland-editor-html', 'I write something in the editor.');
-        //
         this.sendKeys('.nekland-editor-html', 'Hello world', {
-        	keepFocus: true
+            keepFocus: true
         });
         this.click('.nekland-switch-button');
     });
