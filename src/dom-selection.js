@@ -52,9 +52,14 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
 
 window.nekland.Editor.prototype.getCurrentNode = function() {
     if (window.getSelection !== null) {
+        var node = this.getSelectedNode();
 
-        //return this.getSelectedNode().parentNode;
-        return this.getSelectedNode();
+        // The current node can be a text node, this doesn't interest us
+        if (node.tagName === undefined) {
+            node = node.parentNode;
+        }
+
+        return node;
     }
 };
 
