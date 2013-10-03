@@ -92,7 +92,30 @@
                 $p.remove();
                 this.replaceCarretOn($node);
             }
+        } /*
+        // Buggy
+        else {
+            var node, text = '';
+
+            // Getting the supposed text or parent node
+            node = this.getRealCurrentNode();
+
+            // If it's a text node
+            // Saving the text, removing the text node
+            if (node.tagName === undefined) {
+                var textNode = node;
+                text = textNode.toString();
+                node = textNode.parentNode;
+                node.removeChild(textNode);
+            }
+
+            // The parent node
+            $node = $(node);
+            $p    = $('<p>').append(text);
+            $node.append($p);
+            this.replaceCarretOn($p);
         }
+        */
 
         // TODO: traitment on remove li
 

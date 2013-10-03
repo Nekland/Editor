@@ -49,17 +49,28 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
     }
 };
 
-
+/**
+ * Get the current node on carret
+ */
 window.nekland.Editor.prototype.getCurrentNode = function() {
+    var node = this.getRealCurrentNode();
+
+    // The current node can be a text node, this doesn't interest us
+    if (node.tagName === undefined) {
+        node = node.parentNode;
+    }
+
+    return node;
+};
+
+/**
+ * Return the real current node
+ * even if it's a text node
+ */
+window.nekland.Editor.prototype.getRealCurrentNode = function() {
     if (window.getSelection !== null) {
-        var node = this.getSelectedNode();
-
-        // The current node can be a text node, this doesn't interest us
-        if (node.tagName === undefined) {
-            node = node.parentNode;
-        }
-
-        return node;
+        
+        return this.getSelectedNode();
     }
 };
 
