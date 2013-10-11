@@ -92,8 +92,7 @@
                 $p.remove();
                 this.replaceCarretOn($node);
             }
-        } /*
-        // Buggy
+        }
         else {
             var node, text = '';
 
@@ -107,17 +106,18 @@
                 text = textNode.toString();
                 node = textNode.parentNode;
                 node.removeChild(textNode);
+            } else {
+                // If the p is empty, we can't place the carret on it
+                text = '<br />';
             }
 
             // The parent node
             $node = $(node);
+            $node.find('br:last').remove();
             $p    = $('<p>').append(text);
             $node.append($p);
             this.replaceCarretOn($p);
         }
-        */
-
-        // TODO: traitment on remove li
 
         return true;
     };
