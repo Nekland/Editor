@@ -20,6 +20,27 @@ window.nekland.Editor.prototype.pize = function(str) {
     return str;
 };
 
+/**
+ * Take an html string and clean it
+ */
 window.nekland.Editor.prototype.clearHtml = function(html) {
-    return html.replace(/&nbsp;/g, ' ', html);
+	var partial = html.replace(/&nbsp;/g, ' ', html),
+		res     = '',
+		htmlLen = partial.length,
+
+		// Parser vars
+		lastChar   = '',
+		lastIndent = 0;
+
+	for (var i = 0; i < htmlLen; i++) {
+		if (lastChar === '') {
+
+		}
+		if (partial[i] === '<') {
+			
+		}
+	}
+
+
+    return partial;
 };
