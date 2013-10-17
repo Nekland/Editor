@@ -11,6 +11,8 @@ New Features:
 * Added format module
 * Added list module
 * Css file for buttons formating (see release folder)
+* Auto format of the html in the textarea
+* Added table support
 
 Bugfix:
 * Chrome generate now clean code =)
