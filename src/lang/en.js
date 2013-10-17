@@ -38,5 +38,16 @@ window.nekland.lang.editor.en = {
     // List module
     list:       'list',
     normalList: 'list',
-    removeList: 'end the list'
+    removeList: 'end the list',
+
+    // Table module
+    table:               'table',
+    addTable:            'add new table',
+    addRowAbove:         'add row above',
+    addRowBelow:         'add row below',
+    addColumnLeft:       'add column left',
+    addColumnRight:      'add column right',
+    deleteCurrentRow:    'delete current row',
+    deleteCurrentColumn: 'delete current column',
+    deleteCurrentTable:  'delete current table'
 };

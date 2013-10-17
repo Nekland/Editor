@@ -38,5 +38,16 @@ window.nekland.lang.editor.fr = {
     // List module
     list:       'liste',
     normalList: 'liste',
-    removeList: 'terminer la liste'
+    removeList: 'terminer la liste',
+
+    // Table module
+    table:               'tableau',
+    addTable:            'ajouter un tableau',
+    addRowAbove:         'ajouter une ligne au dessus',
+    addRowBelow:         'ajouter une ligne en dessous',
+    addColumnLeft:       'ajouter une colone à gauche',
+    addColumnRight:      'ajouter une colone à droite',
+    deleteCurrentRow:    'supprimer la ligne courante',
+    deleteCurrentColumn: 'supprimer la colone courante',
+    deleteCurrentTable:  'supprimer le tableau courant'
 };
