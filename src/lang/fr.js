@@ -43,6 +43,7 @@ window.nekland.lang.editor.fr = {
     // Table module
     table:               'tableau',
     addTable:            'ajouter un tableau',
+    insertTable:         'insérer nouveau tableau',
     addRowAbove:         'ajouter une ligne au dessus',
     addRowBelow:         'ajouter une ligne en dessous',
     addColumnLeft:       'ajouter une colone à gauche',

@@ -43,6 +43,7 @@ window.nekland.lang.editor.en = {
     // Table module
     table:               'table',
     addTable:            'add new table',
+    insertTable:         'insert new table',
     addRowAbove:         'add row above',
     addRowBelow:         'add row below',
     addColumnLeft:       'add column left',
