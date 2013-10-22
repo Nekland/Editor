@@ -50,5 +50,7 @@ window.nekland.lang.editor.fr = {
     addColumnRight:      'ajouter une colone à droite',
     deleteCurrentRow:    'supprimer la ligne courante',
     deleteCurrentColumn: 'supprimer la colone courante',
-    deleteCurrentTable:  'supprimer le tableau courant'
+    deleteCurrentTable:  'supprimer le tableau courant',
+    columnNumber:        'nombre de colones',
+    rowNumber:           'nombre de lignes'
 };

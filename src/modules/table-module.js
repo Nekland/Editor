@@ -44,24 +44,27 @@
         // Content of the modal
         tpl += '<div class="modal-body">';
         tpl += '<div class="row"><div class="col-md-6">';
+        tpl += '<label for="table-columns-input">' + this.translator.translate('columnNumber', {ucfirst: true}) + '</label>';
         tpl += '<input type="number" class="" id="table-columns-input" />';
         tpl += '</div><div class="col-md-6">';
+        tpl += '<label for="table-rows-input">' + this.translator.translate('rowNumber', {ucfirst: true}) + '</label>';
         tpl += '<input type="number" class="" id="table-rows-input" />';
-        tpl += '</div></div>'
+        tpl += '</div></div>';
         tpl += '</div>';
 
         // Bottom of the modal
         tpl += '<div class="modal-footer">';
         tpl += '<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">';
         tpl += this.translator.translate('close', {ucfirst: true}) + '</button>';
-        tpl += '<button type="button" class="btn btn-primary nekland-editor-command" data-dismiss="modal" data-editor-module="table">';
+        tpl += '<button type="button" class="btn btn-primary nekland-editor-command" data-dismiss="modal" data-editor-command="newTable" data-editor-module="table">';
         tpl += this.translator.translate('insertLink', {ucfirst: true}) + '</button>';
 
         return tpl += '</div></div></div></div>';
     };
 
     /**
-     * Add event on the list dropdown to define the label of the list button
+     * Add event on the table dropdown
+     * and the event for open the modal
      *
      */
     tableModule.prototype.addEvents        = function () {
@@ -83,8 +86,38 @@
     };
 
     tableModule.prototype.execute          = function ($button) {
+        var command = $button.data('editor-command');
 
-        document.execCommand('insertHTML',false, '<table></table>');
+        if (command === 'newTable') {
+            var columns = $('#table-columns-input').val(),
+                rows    = $('#table-rows-input').val(),
+                i       = 0,
+                j       = 0,
+                table   = '<table class="table table-bordered table-hover">',
+                node;
+
+            for (i; i < rows; i++) {
+                table += '<tr>';
+                for (j = 0; j < columns; j++) {
+                    table += '<td></td>';
+                }
+                table += '</tr>';
+            }
+
+            table += '</table>';
+
+            this.replaceSelection();
+
+            // Before inserting table, check the container node
+            node = this.getCurrentNode();
+            if (node.tagName === 'P') {
+                $(node).remove();
+            }
+
+            document.execCommand('insertHTML', false, table);
+        }
+
+        
 
         return true;
     };

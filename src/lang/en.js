@@ -50,5 +50,7 @@ window.nekland.lang.editor.en = {
     addColumnRight:      'add column right',
     deleteCurrentRow:    'delete current row',
     deleteCurrentColumn: 'delete current column',
-    deleteCurrentTable:  'delete current table'
+    deleteCurrentTable:  'delete current table',
+    columnNumber:        'number of columns',
+    rowNumber:           'number of rows'
 };

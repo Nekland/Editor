@@ -21,3 +21,7 @@ a.nekland-editor-formath4 {
 a.nekland-editor-formath5 {
     font-size: 16px;
 }
+
+.nekland-editor-html td {
+    height: 35px;
+}

@@ -84,7 +84,7 @@
      */
     linkModule.prototype.execute          = function ($button) {
         var command = $button.data('editor-command'),
-            $modal   = $('#link-modal'),
+            $modal  = $('#link-modal'),
             link    = null,
             node,
             prevent = false;
@@ -110,7 +110,7 @@
         }
 
         this.replaceSelection();
-        document.execCommand(command, false,  link);
+        document.execCommand(command, false, link);
 
         return prevent;
     };

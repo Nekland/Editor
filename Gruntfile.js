@@ -34,7 +34,8 @@ module.exports = function(grunt) {
                     'src/modules/link-module.js',
                     'src/modules/align-module.js',
                     'src/modules/format-module.js',
-                    'src/modules/list-module.js'
+                    'src/modules/list-module.js',
+                    'src/modules/table-module.js'
                 ],
                 dest: 'release/nekland-editor.js'
             }

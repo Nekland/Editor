@@ -51,6 +51,8 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
 
 /**
  * Get the current node on carret
+ *
+ * @return Node A javascript native dom element
  */
 window.nekland.Editor.prototype.getCurrentNode = function() {
     var node = this.getRealCurrentNode();
@@ -66,6 +68,8 @@ window.nekland.Editor.prototype.getCurrentNode = function() {
 /**
  * Return the real current node
  * even if it's a text node
+ *
+ * @return Node A javascript native dom element
  */
 window.nekland.Editor.prototype.getRealCurrentNode = function() {
     if (window.getSelection !== null) {
@@ -112,19 +116,18 @@ window.nekland.Editor.prototype.setFocusNode = function(node) {
 
 window.nekland.Editor.prototype.insertNodeAtCaret = function(node) {
     var range, sel;
-    sel = this.getSelection;
-    if (window.getSelection) {
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            range.collapse(false);
-            range.insertNode(node);
-            range = range.cloneRange();
-            range.selectNodeContents(node);
-            range.collapse(false);
-            sel.removeAllRanges();
+    sel = this.getSelection();
 
-            return sel.addRange(range);
-        }
+    if (sel.rangeCount) {
+        range = sel.getRangeAt(0);
+        range.collapse(false);
+        range.insertNode(node);
+        range = range.cloneRange();
+        range.selectNodeContents(node);
+        range.collapse(false);
+        sel.removeAllRanges();
+
+        return sel.addRange(range);
     }
 };
 
@@ -174,11 +177,12 @@ window.nekland.Editor.prototype.saveSelection = function() {
  *
  */
 window.nekland.Editor.prototype.formatNewLine = function() {
-    var parent = this.getParentNode();
+    var parent      = this.getParentNode(),
+        currentNode = this.getCurrentNode();
 
     if (parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
     {
-        var element = $(this.getCurrentNode());
+        var element = $(currentNode);
 
         if (element.get(0).tagName === 'DIV' && (element.html() === '' || element.html() === '<br>'))
         {
@@ -190,6 +194,13 @@ window.nekland.Editor.prototype.formatNewLine = function() {
             newElement.html('<br />');
             this.setSelection(newElement[0], 0, newElement[0], 0);
         }
+    } else if (currentNode.tagName === 'DIV' && currentNode.className.indexOf('nekland-editor-html') !== -1) {
+        // Remove trailing br
+        $(currentNode).find('> br').remove();
+
+        var $newElement = $('<p>').html('<br />');
+        this.insertNodeAtCaret($newElement.get(0));
+        //this.setSelection($newElement[0], 0, $newElement[0], 0);
     }
 };
 
