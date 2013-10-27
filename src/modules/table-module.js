@@ -22,8 +22,43 @@
 
         tpl += '<ul class="dropdown-menu">';
 
-        tpl += '<li><a class="open-table-modal" data-editor-module="list" data-editor-command="insertTable" href="javascript:;">' +
+        tpl += '<li><a class="open-table-modal" href="javascript:;">' +
             this.translator.translate('addTable', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addRowAbove">' +
+            this.translator.translate('addRowAbove', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addRowBelow">' +
+            this.translator.translate('addRowBelow', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addColumnLeft">' +
+            this.translator.translate('addColumnLeft', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addColumnRight">' +
+            this.translator.translate('addColumnRight', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentRow">' +
+            this.translator.translate('deleteCurrentRow', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentColumn">' +
+            this.translator.translate('deleteCurrentColumn', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentTable">' +
+            this.translator.translate('deleteCurrentTable', {
                 ucfirst: true
             }) + '</a></li>';
 
@@ -74,6 +109,12 @@
         $tableDropDown.click($.proxy(function() {
 
             // If the carret is on a table, show table modification icons
+            var currentNode = this.getCurrentNode();
+            if (currentNode.tagName === 'TABLE' || currentNode.tagName === 'TR' || currentNode.tagName === 'TD') {
+                $tableDropDown.parent().find('.table-updates').show();
+            } else {
+                $tableDropDown.parent().find('.table-updates').hide();
+            }
 
         }, this));
 
@@ -83,6 +124,16 @@
 
             $('#table-modal').modal('show');
         }, this));
+
+        // To avoid problems with firefox resizing features
+        if (this.compatibility('mozilla')) {
+            try
+            {
+                document.execCommand('enableObjectResizing', false, false);
+                document.execCommand('enableInlineTableEditing', false, false);
+            }
+            catch (e) {}
+        }
     };
 
     tableModule.prototype.execute          = function ($button) {
@@ -93,7 +144,7 @@
                 rows    = $('#table-rows-input').val(),
                 i       = 0,
                 j       = 0,
-                table   = '<table class="table table-bordered table-hover">',
+                table   = '<table class="table table-bordered table-hover"><tbody>',
                 node;
 
             for (i; i < rows; i++) {
@@ -104,7 +155,7 @@
                 table += '</tr>';
             }
 
-            table += '</table>';
+            table += '</tbody></table><p><br /></p>';
 
             this.replaceSelection();
 
@@ -115,9 +166,62 @@
             }
 
             document.execCommand('insertHTML', false, table);
-        }
+        } else {
+            var $currentNode = $(this.getCurrentNode()),
+                html         = '';
 
-        
+            if (command === 'addRowAbove' || command === 'addRowBelow') {
+                var $tr    = $currentNode.parent(),
+                    len    = $tr.find('td').length,
+                    i      = 0;
+
+                html = '<tr>';
+                for (i; i < len; i++) {
+                    html += '<td></td>';
+                }
+                html += '</tr>';
+
+                if (command === 'addRowBelow') {
+                    $tr.after(html);
+                } else {
+                    $tr.before(html);
+                }
+
+            } else if (command === 'addColumnLeft' || command === 'addColumnRight') {
+                var $tr   = $currentNode.parent(),
+                    index = $tr.find('td').index($currentNode),
+                    $trs  = $tr.parent().find('tr'),
+                    addition;
+
+                if (command === 'addColumnLeft') {
+                    addition = function () {
+                        $(this).find('td').eq(index).before('<td></td>');
+                    };
+                } else {
+                    addition = function () {
+                        $(this).find('td').eq(index).after('<td></td>');
+                    };
+                }
+
+                $trs.each(addition);
+            } else if (command === 'deleteCurrentRow') {
+                $currentNode.parent().remove();
+            } else if (command === 'deleteCurrentColumn') {
+                var $tr   = $currentNode.parent(),
+                    index = $tr.find('td').index($currentNode),
+                    $trs  = $tr.parent().find('tr');
+
+                $trs.each(function() {
+                    $(this).find('td').eq(index).remove();
+                });
+            } else if (command === 'deleteCurrentTable') {
+                while ($currentNode.get(0).tagName !== 'TABLE') {
+                    $currentNode = $currentNode.parent();
+                }
+
+                $currentNode.remove();
+            }
+        }
 
         return true;
     };
