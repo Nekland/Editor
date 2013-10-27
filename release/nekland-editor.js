@@ -125,16 +125,23 @@ window.nekland.Editor.prototype.synchronize = function() {
  *
  * @param $button A jQuery object of the clicked button
  */
-window.nekland.Editor.prototype.execute = function ($button) {
+window.nekland.Editor.prototype.execute = function ($button, event) {
     var command = $button.data('editor-module'),
         _i, _len, res;
 
+    // launch execution method for each module
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
         if (this.modules[_i].getName() === command) {
             if (this.$editor.is(':visible')) {
                 res = $.proxy(this.modules[_i].execute, this, $button)();
             }
         }
+    }
+
+    // Firefox fix
+    if (this.compatibility('mozilla') && this.$editor.is(':visible')) {
+        console.log ('hi');
+        this.$editor.focus();
     }
 
     this.synchronize();
@@ -325,9 +332,9 @@ window.nekland.Editor.prototype.addEvents = function() {
     $switcher.click($.proxy(this.switchEditor, this, $switcher));
 
     // Added events on buttons
-    this.$wrapper.find('.nekland-editor-command').click(function() {
+    this.$wrapper.find('.nekland-editor-command').click(function(e) {
 
-        return self.execute($(this));
+        return self.execute($(this), e);
     });
 
     // Added event on the editor when user add any character
@@ -354,16 +361,28 @@ window.nekland.Editor.prototype.addModulesEvents = function() {
  * @param event
  */
 window.nekland.Editor.prototype.onKeyUp = function(event) {
+    var key = event.keyCode || event.which;
+
+    if (key === 13) {
+
+        // Bugfix for chrome/webkit
+        // It doesn't pize the new line
+        if (this.compatibility('webkit')) {
+            this.formatNewLine();
+        }
+        // TODO: convert links on the last line
+    }
+
     this.synchronize();
 };
 
 /**
  * Prevent enter
- * @param e Event
+ * @param event Event
  */
-window.nekland.Editor.prototype.removeEnter = function(e) {
-    if (e.which === 13) {
-        return e.preventDefault();
+window.nekland.Editor.prototype.removeEnter = function(event) {
+    if (event.which === 13) {
+        return event.preventDefault();
     }
 };
 /**
@@ -378,9 +397,12 @@ window.nekland.Editor.prototype.removeEnter = function(e) {
 window.nekland.Editor.prototype.getSelection = function() {
     if (window.getSelection !== null) {
         return window.getSelection();
+
     } else if (document.getSelection !== null) {
+
         return document.getSelection();
     } else {
+
         return document.selection.createRange();
     }
 };
@@ -414,27 +436,55 @@ window.nekland.Editor.prototype.setSelection = function(orgn, orgo, focn, foco) 
     }
 };
 
-
+/**
+ * Get the current node on carret
+ *
+ * @return Node A javascript native dom element
+ */
 window.nekland.Editor.prototype.getCurrentNode = function() {
+    var node = this.getRealCurrentNode();
+
+    // The current node can be a text node, this doesn't interest us
+    if (node.tagName === undefined) {
+        node = node.parentNode;
+    }
+
+    return node;
+};
+
+/**
+ * Return the real current node
+ * even if it's a text node
+ *
+ * @return Node A javascript native dom element
+ */
+window.nekland.Editor.prototype.getRealCurrentNode = function() {
     if (window.getSelection !== null) {
-        return this.getSelectedNode().parentNode;
+        
+        return this.getSelectedNode();
     }
 };
 
 window.nekland.Editor.prototype.getParentNode = function() {
+
     return $(this.getCurrentNode()).parent()[0];
 };
 
 window.nekland.Editor.prototype.getSelectedNode = function() {
     var s;
+
     if (window.getSelection !== null) {
         s = window.getSelection();
         if (s.rangeCount > 0) {
+
             return this.getSelection().getRangeAt(0).commonAncestorContainer;
         } else {
+
             return false;
         }
+
     } else if (document.selection !== null) {
+
         return this.getSelection();
     }
 };
@@ -447,34 +497,38 @@ window.nekland.Editor.prototype.setFocusNode = function(node) {
         selection.collapse(node, 0);
         selection.extend(node, 0);
     }
+
     return this.$editor.trigger('focus');
 };
 
 window.nekland.Editor.prototype.insertNodeAtCaret = function(node) {
     var range, sel;
-    sel = this.getSelection;
-    if (window.getSelection) {
-        if (sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            range.collapse(false);
-            range.insertNode(node);
-            range = range.cloneRange();
-            range.selectNodeContents(node);
-            range.collapse(false);
-            sel.removeAllRanges();
-            return sel.addRange(range);
-        }
+    sel = this.getSelection();
+
+    if (sel.rangeCount) {
+        range = sel.getRangeAt(0);
+        range.collapse(false);
+        range.insertNode(node);
+        range = range.cloneRange();
+        range.selectNodeContents(node);
+        range.collapse(false);
+        sel.removeAllRanges();
+
+        return sel.addRange(range);
     }
 };
 
 window.nekland.Editor.prototype.replaceSelection = function() {
     if ((this.savedSel !== null) && (this.savedSelObj !== null) && this.savedSel[0].tagName !== 'BODY') {
         if ($(this.savedSel[0]).closest('.nekland-editor-html').size() === 0) {
+
             return this.$editor.focus();
         } else {
+
             return this.setSelection(this.savedSel[0], this.savedSel[1], this.savedSelObj[0], this.savedSelObj[1]);
         }
     } else {
+
         return this.$editor.focus();
     }
 };
@@ -482,16 +536,20 @@ window.nekland.Editor.prototype.replaceSelection = function() {
 window.nekland.Editor.prototype.getOrigin = function() {
     var sel;
     if (!((sel = this.getSelection()) && (sel.anchorNode !== null))) {
+
         return null;
     }
+
     return [sel.anchorNode, sel.anchorOffset];
 };
 
 window.nekland.Editor.prototype.getFocus = function() {
     var sel;
     if (!((sel = this.getSelection()) && (sel.focusNode !== null))) {
+
         return null;
     }
+
     return [sel.focusNode, sel.focusOffset];
 };
 
@@ -499,6 +557,48 @@ window.nekland.Editor.prototype.saveSelection = function() {
     this.$editor.focus();
     this.savedSel = this.getOrigin();
     this.savedSelObj = this.getFocus();
+};
+
+/**
+ * Bugfix for webkit
+ *
+ */
+window.nekland.Editor.prototype.formatNewLine = function() {
+    var parent      = this.getParentNode(),
+        currentNode = this.getCurrentNode();
+
+    if (parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
+    {
+        var element = $(currentNode);
+
+        if (element.get(0).tagName === 'DIV' && (element.html() === '' || element.html() === '<br>'))
+        {
+            // Create p element without removing child nodes
+            var newElement = $('<p>').append(element.clone().get(0).childNodes);
+            // Replace the div with the p element
+            element.replaceWith(newElement);
+            // Add a br for not having empty element
+            newElement.html('<br />');
+            this.setSelection(newElement[0], 0, newElement[0], 0);
+        }
+    } else if (currentNode.tagName === 'DIV' && currentNode.className.indexOf('nekland-editor-html') !== -1) {
+        // Remove trailing br
+        $(currentNode).find('> br').remove();
+
+        var $newElement = $('<p>').html('<br />');
+        this.insertNodeAtCaret($newElement.get(0));
+        //this.setSelection($newElement[0], 0, $newElement[0], 0);
+    }
+};
+
+/**
+ * Replace the carret at the start
+ * of the element specified
+ *
+ * @param $element A jQuery object in the $editor
+ */
+window.nekland.Editor.prototype.replaceCarretOn = function($element) {
+    this.setSelection($element[0], 0, $element[0], 0);
 };
 /**
  * This file is a part of nekland editor package
@@ -595,8 +695,291 @@ window.nekland.Editor.prototype.pize = function(str) {
     return str;
 };
 
+/**
+ * Take an html string and clean it
+ */
 window.nekland.Editor.prototype.clearHtml = function(html) {
-    return html.replace(/&nbsp;/g, ' ', html);
+    var partial = html.replace(/&nbsp;/g, ' ', html);
+
+    return this.indentHtml(partial);
+};
+
+/**
+ * Take an html string (basically in one only line) and
+ * return an intented html string
+ *
+ * @param code html as string
+ * @return string of html
+ */
+window.nekland.Editor.prototype.indentHtml = function (code) {
+    var i     = 0,
+        point = 0,
+        start = null,
+        end   = null,
+        tag   = '',
+        out   = '',
+        cont  = '',
+        level = 0,
+
+        ownLine = [
+            'area',
+            'body',
+            'head',
+            'hr',
+            'iframe',
+            'link',
+            'meta',
+            'noscript',
+            'style',
+            'table',
+            'tbody',
+            'thead',
+            'tfoot'
+        ],
+        contOwnLine = [
+            'li',
+            'dt',
+            'dt',
+            'h[1-6]',
+            'option',
+            'script'
+        ],
+
+        //line will go before these tags
+        lineBefore = new RegExp('^<(/?' + ownLine.join('|/?')+'|' + contOwnLine.join('|') + ')[ >]'),
+        //line will go after these tags
+        lineAfter  = new RegExp('^<(br|/?' + ownLine.join('|/?')+'|/' + contOwnLine.join('|/')+')[ >]'),
+        newLevel   = new RegExp('^</?(' + [
+            'blockquote',
+            'div',
+            'dl',
+            'fieldset',
+            'form',
+            'frameset',
+            'map',
+            'ol',
+            'p',
+            'pre',
+            'select',
+            'td',
+            'th',
+            'tr',
+            'ul'
+        ].join('|') + ')[ >]');
+
+    function tabs() {
+        var s = '';
+        for (var j=0; j < level; j++)
+            s += '\t';
+        
+        return s;
+    }
+
+    function placeTag(tag, out) {
+
+        var nl = tag.match(newLevel);
+        if (tag.match(lineBefore) || nl) {
+            out = out.replace(/\s*$/, '');
+            out += "\n";
+        }
+
+        if (nl && '/' == tag.charAt(1))
+            level--;
+        if ('\n' == out.charAt(out.length-1))
+            out += tabs();
+        if (nl && '/' != tag.charAt(1))
+            level++;
+
+        out += tag;
+        if (tag.match(lineAfter) || tag.match(newLevel)) {
+            out = out.replace(/ *$/, '');
+            out += "\n";
+        }
+
+        return out;
+    }
+
+    function cleanTag(tag) {
+        var tagout = '',
+            suffix = '',
+            m,
+            partRe = /\s*([^= ]+)(?:=((['"']).*?\3|[^ ]+))?/;
+        tag = tag.replace(/\n/g, ' ');       //remove newlines
+        tag = tag.replace(/[\s]{2,}/g, ' '); //collapse whitespace
+        tag = tag.replace(/^\s+|\s+$/g, ' '); //collapse whitespace
+
+        if (tag.match(/\/$/)) {
+            suffix='/';
+            tag=tag.replace(/\/+$/, '');
+        }
+        m = partRe.exec(tag);
+        while (m) {
+            if (m[2]) {
+                tagout += m[1].toLowerCase() + '=' + m[2];
+            } else if (m[1]) {
+                tagout += m[1].toLowerCase();
+            }
+            tagout += ' ';
+
+            // Why is this necessary?  I thought .exec() went from where it left off.
+            tag = tag.substr(m[0].length);
+            m = partRe.exec(tag);
+        }
+
+        return tagout.replace(/\s*$/, '') + suffix + '>';
+    }
+
+
+    for (i = 0; i < code.length; i++) {
+        point = i;
+
+        //if no more tags, copy and exit
+        if (-1 == code.substr(i).indexOf('<')) {
+            out += code.substr(i);
+
+            return out;
+        }
+
+        //copy verbatim until a tag
+        while (point < code.length && '<' != code.charAt(point))
+            point++;
+        if (i != point) {
+            cont = code.substr(i, point - i);
+            if (!cont.match(/^\s+$/)) {
+                if ('\n' == out.charAt(out.length - 1)) {
+                    out += tabs();
+                } else if ('\n' == cont.charAt(0)) {
+                    out += '\n' + tabs();
+                    cont = cont.replace(/^\s+/, '');
+                }
+                cont = cont.replace(/\s+/g, ' ');
+                out += cont;
+            } if (cont.match(/\n/)) {
+                out += '\n' + tabs();
+            }
+        }
+        start = point;
+
+        //find the end of the tag
+        while (point < code.length && '>' != code.charAt(point))
+            point++;
+
+        tag = code.substr(start, point-start);
+        i   = point;
+
+        //if this is a special tag, deal with it!
+        if ('!--' == tag.substr(1,3)) {
+            if (!tag.match(/--$/)) {
+                while ('-->' != code.substr(point, 3))
+                    point++;
+                point += 2;
+                tag = code.substr(start, point-start);
+                i = point;
+            }
+            if ('\n' != out.charAt(out.length-1))
+                out += '\n';
+            out += tabs();
+            out += tag+'>\n';
+        } else if ('!' == tag[1]) {
+            out = placeTag(tag+'>', out);
+        } else if ('?' == tag[1]) {
+            out += tag + '>\n';
+        } else {
+            t = tag.match(/^<(script|style)/i);
+            if (t) {
+                t[1] = t[1].toLowerCase();
+                tag  = cleanTag(tag);
+                out  = placeTag(tag, out);
+                end  = String(code.substr(i +1)).toLowerCase().indexOf('</' + t[1]);
+                if (end) {
+                    cont = code.substr(i + 1, end);
+                    i   += end;
+                    out += cont;
+                }
+            } else {
+                tag = cleanTag(tag);
+                out = placeTag(tag, out);
+            }
+        }
+    }
+
+    return out.substr(1, out.length-1);
+};
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+/**
+ * Allow simple browser compatibility check
+ *
+ * @param browser One of theses strings: "webkit" | "mozilla" | "opera" | "msie" | 'chrome' | "version"
+ * @return string|bool String when version is asked. Bool when browser is asked
+ */
+window.nekland.Editor.prototype.compatibility = function(browser) {
+
+    // Caching the data to avoid multiple regex execution
+    if (this.browser === undefined) {
+        var ua = navigator.userAgent.toLowerCase();
+        var match = /(chrome)[ \/]([\w.]+)/.exec(ua) || /(webkit)[ \/]([\w.]+)/.exec(ua) || /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) || /(msie) ([\w.]+)/.exec(ua) || ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) || [];
+
+        this.version = match[2];
+        this.browser = match[1];
+    }
+
+    if (browser == 'version') {
+        return this.version;
+    }
+
+    if (browser == 'webkit') {
+        return (this.browser == 'chrome' || this.browser == 'webkit');
+    }
+
+    return this.browser == browser;
+};
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+/**
+ * Generate a special code that is unique
+ *
+ * Notice: this function comes from php_js.
+ */
+uniqid = function(prefix, more_entropy) {
+    var formatSeed, retId;
+    if (typeof prefix === 'undefined') {
+        prefix = "";
+    }
+    formatSeed = function(seed, reqWidth) {
+        seed = parseInt(seed, 10).toString(16);
+        if (reqWidth < seed.length) {
+            return seed.slice(seed.length - reqWidth);
+        }
+        if (reqWidth > seed.length) {
+            return Array(1 + (reqWidth - seed.length)).join('0') + seed;
+        }
+        return seed;
+    };
+    uniqidSeed = Math.floor(Math.random() * 0x75bcd15);
+    uniqidSeed++;
+
+    retId = prefix;
+    retId += formatSeed(parseInt(new Date().getTime() / 1000, 10), 8);
+    retId += formatSeed(uniqidSeed, 5);
+    if (more_entropy) {
+      retId += (Math.random() * 10).toFixed(8).toString();
+    }
+    return retId;
 };
 /**
  * This file is a part of nekland editor package
@@ -643,7 +1026,41 @@ window.nekland.lang.editor.en = {
     link: 'link',
     removeLink: 'remove link',
     notALink: 'your link is not a valid link',
-    modules: {}
+
+    // Alignment module
+    alignment:        'alignment',
+    alignmentLeft:    'alignment to the left',
+    alignmentRight:   'alignment to the right',
+    alignmentCenter:  'alignment to the center',
+    alignmentJustify: 'justify alignment',
+
+    // Format module
+    format:       'format',
+    formatNormal: 'normal text',
+    formatH1:     'title 1',
+    formatH2:     'title 2',
+    formatH3:     'title 3',
+    formatH4:     'title 4',
+    formatH5:     'title 5',
+
+    // List module
+    list:       'list',
+    normalList: 'list',
+    removeList: 'end the list',
+
+    // Table module
+    table:               'table',
+    addTable:            'add new table',
+    insertTable:         'insert new table',
+    addRowAbove:         'add row above',
+    addRowBelow:         'add row below',
+    addColumnLeft:       'add column left',
+    addColumnRight:      'add column right',
+    deleteCurrentRow:    'delete current row',
+    deleteCurrentColumn: 'delete current column',
+    deleteCurrentTable:  'delete current table',
+    columnNumber:        'number of columns',
+    rowNumber:           'number of rows'
 };
 /**
  * This file is a part of nekland editor package
@@ -662,10 +1079,10 @@ window.nekland.lang.editor.en = {
     basicModule.prototype.getTemplateBefore = function() {
         var tpl;
         tpl = '<div class="btn-group">';
-        tpl += '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="bold"><b>' + this.translator.translate('bold', {
+        tpl += '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="bold" id="nekland-editor-bold"><b>' + this.translator.translate('bold', {
             ucfirst: true
         }) + '</b></button>';
-        tpl += '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="italic"><i>' + this.translator.translate('italic', {
+        tpl += '<button type="button" class="btn btn-default nekland-editor-command" data-editor-module="basic" data-editor-command="italic" id="nekland-editor-italic"><i>' + this.translator.translate('italic', {
             ucfirst: true
         }) + '</i></button>';
         return tpl +='</div>';
@@ -700,7 +1117,7 @@ window.nekland.lang.editor.en = {
 
         tpl += '<a class="btn btn-default dropdown-toggle link-modal" data-toggle="dropdown" href="#">' + this.translator.translate('link', {
             ucfirst: true
-        }) + '<span class="caret"></span></a>';
+        }) + ' <span class="caret"></span></a>';
 
         tpl += '<ul class="dropdown-menu">';
 
@@ -709,7 +1126,7 @@ window.nekland.lang.editor.en = {
             ucfirst: true
         }) + '</a></li>';
 
-        tpl += '<li><a href="#" class="nekland-editor-command" data-editor-command="unlink" data-editor-module="link" data-prevent="no">' + this.translator.translate('removeLink', {
+        tpl += '<li><a href="#" class="nekland-editor-command" data-editor-command="unlink" data-editor-module="link">' + this.translator.translate('removeLink', {
             ucfirst: true
         }) + '</a></li>';
 
@@ -745,8 +1162,12 @@ window.nekland.lang.editor.en = {
 
         return tpl += '</div></div></div></div>';
     };
+
+    /**
+     * Add events for open modal on click on link
+     *
+     */
     linkModule.prototype.addEvents        = function() {
-        //this.$wrapper.find('.link-modal').modal('hide');
         this.$wrapper.find('.open-link-modal').click($.proxy(function() {
             this.saveSelection();
 
@@ -755,9 +1176,15 @@ window.nekland.lang.editor.en = {
         this.$wrapper.find('.link-input').keydown(this.removeEnter);
     };
 
+    /**
+     * Execute the creation or remove of a link
+     *
+     * @param $button jQuery object of the button clicked
+     * @return boolean true if there is a link addition (letting the checkbox close) flase in other cases
+     */
     linkModule.prototype.execute          = function ($button) {
         var command = $button.data('editor-command'),
-            $modal   = $('#link-modal'),
+            $modal  = $('#link-modal'),
             link    = null,
             node,
             prevent = false;
@@ -783,7 +1210,7 @@ window.nekland.lang.editor.en = {
         }
 
         this.replaceSelection();
-        document.execCommand(command, false,  link);
+        document.execCommand(command, false, link);
 
         return prevent;
     };
@@ -791,4 +1218,495 @@ window.nekland.lang.editor.en = {
     linkModule.prototype.getName          = function() { return 'link'; };
 
     window.nekland.Editor.modules.push(linkModule);
+})();
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+(function() {
+    var alignModule = function(translator) {
+        this.translator = translator;
+    };
+
+    alignModule.prototype.getTemplateBefore = function() {
+        var tpl = '<div class="btn-group">';
+
+        tpl += '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;">' +
+            this.translator.translate('alignment', {
+                ucfirst: true
+            }) + ' <span class="caret"></span></a>';
+
+        tpl += '<ul class="dropdown-menu">';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyLeft">' +
+            '<span class="glyphicon glyphicon-align-left"></span> ' +
+            this.translator.translate('alignmentLeft', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyRight">' +
+            '<span class="glyphicon glyphicon-align-right"></span> ' +
+            this.translator.translate('alignmentRight', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyCenter">' +
+            '<span class="glyphicon glyphicon-align-center"></span> ' +
+            this.translator.translate('alignmentCenter', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="alignment" data-editor-command="justifyFull">' +
+            '<span class="glyphicon glyphicon-align-justify"></span> ' +
+            this.translator.translate('alignmentJustify', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '</ul></div>';
+
+        return tpl;
+    };
+
+    alignModule.prototype.execute          = function ($button) {
+        var command = $button.data('editor-command');
+        document.execCommand(command);
+
+        return true;
+    };
+
+    alignModule.prototype.getName          = function() { return 'alignment'; };
+
+    window.nekland.Editor.modules.push(alignModule);
+})();
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+(function() {
+    var formatModule = function(translator) {
+        this.translator = translator;
+    };
+
+    formatModule.prototype.getTemplateBefore = function() {
+        var tpl = '<div class="btn-group">';
+
+        tpl += '<a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="javascript:;">' +
+            this.translator.translate('format', {
+                ucfirst: true
+            }) + ' <span class="caret"></span></a>';
+
+        tpl += '<ul class="dropdown-menu">';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command" data-editor-module="format" data-editor-command="p">' +
+            this.translator.translate('formatNormal', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command nekland-editor-formath1" data-editor-module="format" data-editor-command="h1">' +
+            this.translator.translate('formatH1', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command nekland-editor-formath2" data-editor-module="format" data-editor-command="h2">' +
+            this.translator.translate('formatH2', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command nekland-editor-formath3" data-editor-module="format" data-editor-command="h3">' +
+            this.translator.translate('formatH3', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command nekland-editor-formath4" data-editor-module="format" data-editor-command="h4">' +
+            this.translator.translate('formatH4', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li><a href="javascript:;" class="nekland-editor-command nekland-editor-formath5" data-editor-module="format" data-editor-command="h5">' +
+            this.translator.translate('formatH5', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '</ul></div>';
+
+        return tpl;
+    };
+
+    formatModule.prototype.execute          = function ($button) {
+        var command = $button.data('editor-command');
+        document.execCommand('formatblock', false, command);
+
+        return true;
+    };
+
+    formatModule.prototype.getName          = function() { return 'format'; };
+
+    window.nekland.Editor.modules.push(formatModule);
+})();
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+(function() {
+    var listModule = function(translator) {
+        this.translator = translator;
+    };
+
+    listModule.prototype.getTemplateBefore = function() {
+        var tpl = '<div class="btn-group">';
+
+        tpl += '<a class="btn btn-default dropdown-toggle list-dropdown" data-toggle="dropdown" href="javascript:;">' +
+            this.translator.translate('list', {
+                ucfirst: true
+            }) + ' <span class="caret"></span></a>';
+
+        tpl += '<ul class="dropdown-menu">';
+
+        tpl += '<li><a class="nekland-editor-command list-button" data-editor-module="list" data-editor-command="insertUnorderedList" href="javascript:;">' +
+            '<span class="glyphicon glyphicon-list"></span> ' +
+            this.translator.translate('normalList', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '</ul></div>';
+
+        return tpl;
+    };
+
+    /**
+     * Add event on the list dropdown to define the label of the list button
+     *
+     */
+    listModule.prototype.addEvents        = function() {
+
+        this.$wrapper.find('.list-dropdown').click($.proxy(function() {
+            var $listButton = this.$wrapper.find('.list-button');
+
+            if (this.getCurrentNode().tagName === 'LI') {
+
+                $listButton.html(
+                    '<span class="glyphicon glyphicon-list"></span> ' + 
+                    this.translator.translate('removeList', {
+                        ucfirst: true
+                    }
+                ));
+            } else {
+
+                $listButton.html(
+                    '<span class="glyphicon glyphicon-list"></span> ' +
+                    this.translator.translate('normalList', {
+                        ucfirst: true
+                    }
+                ));
+            }
+
+        }, this));
+    };
+
+    listModule.prototype.execute          = function ($button) {
+        var command  = $button.data('editor-command'),
+            removeLi = false,
+            $node,
+            html,
+            $p;
+
+        // When the current node is a li
+        // we have to check 
+        if (this.getCurrentNode().tagName === 'LI') {
+            removeLi = true;
+        }
+
+        document.execCommand(command);
+
+        if (!removeLi) {
+            // Getting the supposed UL
+            $node = $(this.getParentNode());
+
+            // supposed the "p"
+            $p = $node.parent();
+
+            // if it's really a p
+            if ($p.get(0).tagName === 'P') {
+                // Add content of the p at the end of $editor
+                this.$editor.append($node);
+                $p.remove();
+                this.replaceCarretOn($node);
+            }
+        }
+        else {
+            var node, text = '';
+
+            // Getting the supposed text or parent node
+            node = this.getRealCurrentNode();
+
+            // If it's a text node
+            // Saving the text, removing the text node
+            if (node.tagName === undefined) {
+                var textNode = node;
+                text = textNode.toString();
+                node = textNode.parentNode;
+                node.removeChild(textNode);
+            } else {
+                // If the p is empty, we can't place the carret on it
+                text = '<br />';
+            }
+
+            // The parent node
+            $node = $(node);
+            $node.find('br:last').remove();
+            $p    = $('<p>').append(text);
+            $node.append($p);
+            this.replaceCarretOn($p);
+        }
+
+        return true;
+    };
+
+    listModule.prototype.getName          = function() { return 'list'; };
+
+    window.nekland.Editor.modules.push(listModule);
+})();
+/**
+ * This file is a part of nekland editor package
+ *
+ * (c) Nekland <nekland.fr@gmail.fr>
+ *
+ * For the full license, take a look to the LICENSE file
+ * on the root directory of this project
+ */
+
+(function() {
+    var tableModule = function(translator) {
+        this.translator = translator;
+    };
+
+    tableModule.prototype.getTemplateBefore = function () {
+        var tpl = '<div class="btn-group">';
+
+        tpl += '<a class="btn btn-default dropdown-toggle table-dropdown" data-toggle="dropdown" href="javascript:;">' +
+            this.translator.translate('table', {
+                ucfirst: true
+            }) + ' <span class="caret"></span></a>';
+
+        tpl += '<ul class="dropdown-menu">';
+
+        tpl += '<li><a class="open-table-modal" href="javascript:;">' +
+            this.translator.translate('addTable', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addRowAbove">' +
+            this.translator.translate('addRowAbove', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addRowBelow">' +
+            this.translator.translate('addRowBelow', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addColumnLeft">' +
+            this.translator.translate('addColumnLeft', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="addColumnRight">' +
+            this.translator.translate('addColumnRight', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentRow">' +
+            this.translator.translate('deleteCurrentRow', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentColumn">' +
+            this.translator.translate('deleteCurrentColumn', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '<li class="table-updates"><a href="javascript:;" class="nekland-editor-command" data-editor-module="table" data-editor-command="deleteCurrentTable">' +
+            this.translator.translate('deleteCurrentTable', {
+                ucfirst: true
+            }) + '</a></li>';
+
+        tpl += '</ul></div>';
+
+        return tpl;
+    };
+
+    tableModule.prototype.getTemplateAfter = function () {
+
+        // Header of the modal
+        var tpl = '<div class="modal fade" id="table-modal" role="dialog" aria-hidden="true">';
+        tpl += '<div class="modal-dialog"><div class="modal-content"><div class="modal-header">';
+        tpl += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+        tpl += '<h3>' + this.translator.translate('addTable', {ucfirst: true}) + '</h3>';
+        tpl += '</div>';
+
+        // Content of the modal
+        tpl += '<div class="modal-body">';
+        tpl += '<div class="row"><div class="col-md-6">';
+        tpl += '<label for="table-columns-input">' + this.translator.translate('columnNumber', {ucfirst: true}) + '</label>';
+        tpl += '<input type="number" class="" id="table-columns-input" />';
+        tpl += '</div><div class="col-md-6">';
+        tpl += '<label for="table-rows-input">' + this.translator.translate('rowNumber', {ucfirst: true}) + '</label>';
+        tpl += '<input type="number" class="" id="table-rows-input" />';
+        tpl += '</div></div>';
+        tpl += '</div>';
+
+        // Bottom of the modal
+        tpl += '<div class="modal-footer">';
+        tpl += '<button type="button" class="btn" data-dismiss="modal" aria-hidden="true">';
+        tpl += this.translator.translate('close', {ucfirst: true}) + '</button>';
+        tpl += '<button type="button" class="btn btn-primary nekland-editor-command" data-dismiss="modal" data-editor-command="newTable" data-editor-module="table">';
+        tpl += this.translator.translate('insertLink', {ucfirst: true}) + '</button>';
+
+        return tpl += '</div></div></div></div>';
+    };
+
+    /**
+     * Add event on the table dropdown
+     * and the event for open the modal
+     *
+     */
+    tableModule.prototype.addEvents        = function () {
+
+        var $tableDropDown = this.$wrapper.find('.table-dropdown');
+
+        $tableDropDown.click($.proxy(function() {
+
+            // If the carret is on a table, show table modification icons
+            var currentNode = this.getCurrentNode();
+            if (currentNode.tagName === 'TABLE' || currentNode.tagName === 'TR' || currentNode.tagName === 'TD') {
+                $tableDropDown.parent().find('.table-updates').show();
+            } else {
+                $tableDropDown.parent().find('.table-updates').hide();
+            }
+
+        }, this));
+
+
+        this.$wrapper.find('.open-table-modal').click($.proxy(function() {
+            this.saveSelection();
+
+            $('#table-modal').modal('show');
+        }, this));
+
+        // To avoid problems with firefox resizing features
+        if (this.compatibility('mozilla')) {
+            try
+            {
+                document.execCommand('enableObjectResizing', false, false);
+                document.execCommand('enableInlineTableEditing', false, false);
+            }
+            catch (e) {}
+        }
+    };
+
+    tableModule.prototype.execute          = function ($button) {
+        var command = $button.data('editor-command'),
+            i       = 0;
+
+        if (command === 'newTable') {
+            var columns = $('#table-columns-input').val(),
+                rows    = $('#table-rows-input').val(),
+                j       = 0,
+                table   = '<table class="table table-bordered table-hover"><tbody>',
+                node;
+
+            for (i; i < rows; i++) {
+                table += '<tr>';
+                for (j = 0; j < columns; j++) {
+                    table += '<td></td>';
+                }
+                table += '</tr>';
+            }
+
+            table += '</tbody></table><p><br /></p>';
+
+            this.replaceSelection();
+
+            // Before inserting table, check the container node
+            node = this.getCurrentNode();
+            if (node.tagName === 'P') {
+                $(node).remove();
+            }
+
+            document.execCommand('insertHTML', false, table);
+        } else {
+            var $currentNode = $(this.getCurrentNode()),
+                html         = '',
+                $tr          = $currentNode.parent(),
+                $trs         = $tr.parent().find('tr'),
+                index;
+
+            if (command === 'addRowAbove' || command === 'addRowBelow') {
+                var len    = $tr.find('td').length;
+
+                html = '<tr>';
+                for (i; i < len; i++) {
+                    html += '<td></td>';
+                }
+                html += '</tr>';
+
+                if (command === 'addRowBelow') {
+                    $tr.after(html);
+                } else {
+                    $tr.before(html);
+                }
+
+            } else if (command === 'addColumnLeft' || command === 'addColumnRight') {
+                index = $tr.find('td').index($currentNode);
+                var addition;
+
+                if (command === 'addColumnLeft') {
+                    addition = function () {
+                        $(this).find('td').eq(index).before('<td></td>');
+                    };
+                } else {
+                    addition = function () {
+                        $(this).find('td').eq(index).after('<td></td>');
+                    };
+                }
+
+                $trs.each(addition);
+            } else if (command === 'deleteCurrentRow') {
+                $currentNode.parent().remove();
+            } else if (command === 'deleteCurrentColumn') {
+                index = $tr.find('td').index($currentNode);
+
+                $trs.each(function() {
+                    $(this).find('td').eq(index).remove();
+                });
+            } else if (command === 'deleteCurrentTable') {
+                while ($currentNode.get(0).tagName !== 'TABLE') {
+                    $currentNode = $currentNode.parent();
+                }
+
+                $currentNode.remove();
+            }
+        }
+
+        return true;
+    };
+
+    tableModule.prototype.getName          = function() { return 'table'; };
+
+    window.nekland.Editor.modules.push(tableModule);
 })();
