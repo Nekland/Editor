@@ -137,12 +137,12 @@
     };
 
     tableModule.prototype.execute          = function ($button) {
-        var command = $button.data('editor-command');
+        var command = $button.data('editor-command'),
+            i       = 0;
 
         if (command === 'newTable') {
             var columns = $('#table-columns-input').val(),
                 rows    = $('#table-rows-input').val(),
-                i       = 0,
                 j       = 0,
                 table   = '<table class="table table-bordered table-hover"><tbody>',
                 node;
@@ -168,12 +168,13 @@
             document.execCommand('insertHTML', false, table);
         } else {
             var $currentNode = $(this.getCurrentNode()),
-                html         = '';
+                html         = '',
+                $tr          = $currentNode.parent(),
+                $trs         = $tr.parent().find('tr'),
+                index;
 
             if (command === 'addRowAbove' || command === 'addRowBelow') {
-                var $tr    = $currentNode.parent(),
-                    len    = $tr.find('td').length,
-                    i      = 0;
+                var len    = $tr.find('td').length;
 
                 html = '<tr>';
                 for (i; i < len; i++) {
@@ -188,10 +189,8 @@
                 }
 
             } else if (command === 'addColumnLeft' || command === 'addColumnRight') {
-                var $tr   = $currentNode.parent(),
-                    index = $tr.find('td').index($currentNode),
-                    $trs  = $tr.parent().find('tr'),
-                    addition;
+                index = $tr.find('td').index($currentNode);
+                var addition;
 
                 if (command === 'addColumnLeft') {
                     addition = function () {
@@ -207,9 +206,7 @@
             } else if (command === 'deleteCurrentRow') {
                 $currentNode.parent().remove();
             } else if (command === 'deleteCurrentColumn') {
-                var $tr   = $currentNode.parent(),
-                    index = $tr.find('td').index($currentNode),
-                    $trs  = $tr.parent().find('tr');
+                index = $tr.find('td').index($currentNode);
 
                 $trs.each(function() {
                     $(this).find('td').eq(index).remove();
