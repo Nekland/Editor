@@ -32,7 +32,8 @@
         "grunt-contrib-jshint":   "~0.6.3",
         "grunt-contrib-concat":   "~v0.1.2",
         "grunt-contrib-nodeunit": "~0.2.0",
-        "grunt-contrib-uglify":   "~0.2.2"
+        "grunt-contrib-uglify":   "~0.2.2",
+        "bower":                  "latest"
     },
     "scripts": {
         "install": "bower install",
