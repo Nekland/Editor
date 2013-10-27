@@ -226,8 +226,7 @@ window.nekland.Editor.prototype.indentHtml = function (code) {
                 out = placeTag(tag, out);
             }
         }
-            
     }
 
-    return out;
+    return out.substr(1, out.length-1);
 };
