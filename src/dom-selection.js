@@ -204,6 +204,25 @@ window.nekland.Editor.prototype.formatNewLine = function() {
     }
 };
 
+
+window.nekland.Editor.prototype.getCarretParentNode = function (tag) {
+    var node = this.getCurrentNode();
+
+    while (node.tagName !== tag && !this.isContainer(node)) {
+        node = node.parentNode;
+    }
+
+    if (node.tagName === tag) {
+        return node;
+    }
+
+    return false;
+};
+
+window.nekland.Editor.prototype.isContainer = function (node) {
+    return node.nodeName === 'DIV' && node.className.indexOf('nekland-editor-html') !== -1;
+}
+
 /**
  * Replace the carret at the start
  * of the element specified

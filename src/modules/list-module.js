@@ -67,6 +67,7 @@
         var command  = $button.data('editor-command'),
             removeLi = false,
             $node,
+            node,
             html,
             $p;
 
@@ -79,22 +80,31 @@
         document.execCommand(command);
 
         if (!removeLi) {
-            // Getting the supposed UL
-            $node = $(this.getParentNode());
+            // This is a bugfix while executing new list element
+
+            if (this.compatibility('webkit')) {
+                $node = $(this.getCarretParentNode('LI'));
+
+                $node.find('span, b, i').each(function() {
+                    $(this).removeAttr('style');
+                });
+            }
+
 
             // supposed the "p"
-            $p = $node.parent();
+            $p = this.getCarretParentNode('P');
 
             // if it's really a p
-            if ($p.get(0).tagName === 'P') {
+            if ($p) {
+                $p = $($p);
+                $p.after($p.html());
                 // Add content of the p at the end of $editor
-                this.$editor.append($node);
+                //this.$editor.append($node);
+                this.replaceCarretOn($p.next('ul').find('li'));
                 $p.remove();
-                this.replaceCarretOn($node);
             }
-        }
-        else {
-            var node, text = '';
+        } else {
+            var text = '';
 
             // Getting the supposed text or parent node
             node = this.getRealCurrentNode();
