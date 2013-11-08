@@ -177,22 +177,24 @@ window.nekland.Editor.prototype.saveSelection = function() {
  *
  */
 window.nekland.Editor.prototype.formatNewLine = function() {
-    var parent      = this.getParentNode(),
-        currentNode = this.getCurrentNode();
+    var parent      = this.getParentBlockNode(),
+        currentNode = this.getCurrentBlockNode();
 
-    if (parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
+
+    if (currentNode.nodeName === 'DIV' && parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
     {
-        var element = $(currentNode);
+        var $element = $(currentNode);
 
-        if (element.get(0).tagName === 'DIV' && (element.html() === '' || element.html() === '<br>'))
+        if ($element.get(0).tagName === 'DIV')
         {
             // Create p element without removing child nodes
-            var newElement = $('<p>').append(element.clone().get(0).childNodes);
+            var html        = $element.clone().html(),
+                $newElement = $('<p>').append(html);
             // Replace the div with the p element
-            element.replaceWith(newElement);
+            $element.replaceWith($newElement);
             // Add a br for not having empty element
-            newElement.html('<br />');
-            this.setSelection(newElement[0], 0, newElement[0], 0);
+            var $lastElement = $newElement.find('br').parent();
+            this.setSelection($lastElement[0], 0, $lastElement[0], 0);
         }
     } else if (currentNode.tagName === 'DIV' && currentNode.className.indexOf('nekland-editor-html') !== -1) {
         // Remove trailing br
@@ -204,8 +206,26 @@ window.nekland.Editor.prototype.formatNewLine = function() {
     }
 };
 
+/**
+ * Note: will bug if usage on broken html
+ *
+ */
+window.nekland.Editor.prototype.getParentBlockNode = function () {
 
-window.nekland.Editor.prototype.getCarretParentNode = function (tag) {
+    return $(this.getCurrentBlockNode()).parent()[0];
+};
+
+window.nekland.Editor.prototype.getCurrentBlockNode = function () {
+    var node = this.getCurrentNode();
+
+    while (node.tagName !== 'P' && node.tagName !== 'DIV' && node.tagName !== 'TABLE' && node.tagName !== 'UL') {
+        node = node.parentNode;
+    }
+
+    return node;
+};
+
+window.nekland.Editor.prototype.getParentNodeAtCarret = function (tag) {
     var node = this.getCurrentNode();
 
     while (node.tagName !== tag && !this.isContainer(node)) {

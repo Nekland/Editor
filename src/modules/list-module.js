@@ -83,7 +83,7 @@
             // This is a bugfix while executing new list element
 
             if (this.compatibility('webkit')) {
-                $node = $(this.getCarretParentNode('LI'));
+                $node = $(this.getParentNodeAtCarret('LI'));
 
                 $node.find('span, b, i').each(function() {
                     $(this).removeAttr('style');
@@ -92,7 +92,7 @@
 
 
             // supposed the "p"
-            $p = this.getCarretParentNode('P');
+            $p = this.getParentNodeAtCarret('P');
 
             // if it's really a p
             if ($p) {
