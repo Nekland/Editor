@@ -52,5 +52,10 @@ window.nekland.lang.editor.fr = {
     deleteCurrentColumn: 'supprimer la colone courante',
     deleteCurrentTable:  'supprimer le tableau courant',
     columnNumber:        'nombre de colones',
-    rowNumber:           'nombre de lignes'
+    rowNumber:           'nombre de lignes',
+
+    // Image module
+    image:               'image',
+    yourImage:           'votre image',
+    insertImage:         'insérer l\'image'
 };

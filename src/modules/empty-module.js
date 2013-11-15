@@ -36,7 +36,7 @@
 
     // Again nothing to do since the template has the class "nekland-editor-command"
     // An event will be automatically added ;-)
-    myModule.prototype.addEvents        = function () {};
+    myModule.prototype.addEvents        = function (currentModule) {};
 
     // The name of the module
     myModule.prototype.getName          = function () { return 'empty'; };

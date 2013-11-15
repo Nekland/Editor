@@ -52,5 +52,11 @@ window.nekland.lang.editor.en = {
     deleteCurrentColumn: 'delete current column',
     deleteCurrentTable:  'delete current table',
     columnNumber:        'number of columns',
-    rowNumber:           'number of rows'
+    rowNumber:           'number of rows',
+
+    // Image module
+    image:               'image',
+    yourImage:           'your image',
+    insertImage:         'insert the image'
+
 };

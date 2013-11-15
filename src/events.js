@@ -34,7 +34,7 @@ window.nekland.Editor.prototype.addModulesEvents = function() {
 
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
         if (this.modules[_i].addEvents !== undefined && typeof this.modules[_i].addEvents === 'function') {
-            $.proxy(this.modules[_i].addEvents, this)();
+            $.proxy(this.modules[_i].addEvents, this, this.modules[_i])();
         }
     }
 };
