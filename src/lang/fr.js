@@ -57,5 +57,6 @@ window.nekland.lang.editor.fr = {
     // Image module
     image:               'image',
     yourImage:           'votre image',
-    insertImage:         'insérer l\'image'
+    insertImage:         'insérer l\'image',
+    addImage:            'ajouter une image'
 };

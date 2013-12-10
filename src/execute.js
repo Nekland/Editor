@@ -27,7 +27,6 @@ window.nekland.Editor.prototype.execute = function ($button, event) {
 
     // Firefox fix
     if (this.compatibility('mozilla') && this.$editor.is(':visible')) {
-        console.log ('hi');
         this.$editor.focus();
     }
 
