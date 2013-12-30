@@ -58,5 +58,15 @@
         };
     };
 
+    // Theses methods are not needed
+    // The setOptions will be call only if it exists
+    imageModule.prototype.getOption        = function (option) { return this.options[option]; };
+    imageModule.prototype.setOptions       = function (_options) {
+        if (_options !== undefined) {
+            this.options = $.extends({}, this.options, _options);
+        }
+    };
+
+
     window.nekland.Editor.modules.push(myModule);
 })();

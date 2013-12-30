@@ -105,17 +105,17 @@
         return true;
     };
 
-    imageModule.prototype.sendImage        = function() {
+    imageModule.prototype.sendImage        = function () {
 
     };
 
-    imageModule.prototype.getName          = function() { return 'image'; };
-    imageModule.prototype.getOption        = function(option) { return this.options[option]; };
+    imageModule.prototype.getName          = function () { return 'image'; };
+    imageModule.prototype.getOption        = function (option) { return this.options[option]; };
     imageModule.prototype.setOptions       = function (_options) {
         if (_options !== undefined) {
             this.options = $.extends({}, this.options, _options);
         }
-    }
+    };
 
     window.nekland.Editor.modules.push(imageModule);
 })();
