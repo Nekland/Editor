@@ -8,7 +8,7 @@
  */
 
 (function() {
-    var imageModule = function(translator, options) {
+    var imageModule = function(translator) {
         this.translator = translator;
         this.options    = {
             path:      'upload.html',
@@ -17,9 +17,6 @@
             dataName:  'url'
         };
 
-        if (options !== undefined) {
-            this.options = $.extends({}, this.options, options);
-        }
     };
 
     imageModule.prototype.getTemplateBefore = function () {
@@ -114,6 +111,11 @@
 
     imageModule.prototype.getName          = function() { return 'image'; };
     imageModule.prototype.getOption        = function(option) { return this.options[option]; };
+    imageModule.prototype.setOptions       = function (_options) {
+        if (_options !== undefined) {
+            this.options = $.extends({}, this.options, _options);
+        }
+    }
 
     window.nekland.Editor.modules.push(imageModule);
 })();

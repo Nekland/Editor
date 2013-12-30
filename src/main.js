@@ -24,9 +24,10 @@ window.nekland.Editor = function($domElement, _options, _templates) {
 
     // Settings merging
     this.settings = $.extend(true, {}, {
-        mode: 'classical',
-        uid: uniqid(),
-        lang: 'en'
+        mode:    'classical',
+        uid:     uniqid(),
+        lang:    'en',
+        modules: {}
     }, _options);
 
     // Translations loading

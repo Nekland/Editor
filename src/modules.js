@@ -25,10 +25,13 @@ window.nekland.Editor.prototype.initModules = function() {
     this.modules = [];
 
     for (_i = 0, _len = window.nekland.Editor.modules.length; _i < _len; _i++) {
-
         _module = new window.nekland.Editor.modules[_i](this.translator);
 
         this.checkModule(_module);
+
+        if (typeof module.setOptions === 'function') {
+            _module.setOptions(this.options.modules[_module.getName()]);
+        }
 
         this.modules.push(_module);
     }
