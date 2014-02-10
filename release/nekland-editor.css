@@ -25,3 +25,7 @@ a.nekland-editor-formath5 {
 .nekland-editor-html td {
     height: 35px;
 }
+
+.nekland-editor-html {
+	overflow: auto;
+}
