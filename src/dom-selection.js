@@ -178,7 +178,8 @@ window.nekland.Editor.prototype.saveSelection = function() {
  */
 window.nekland.Editor.prototype.formatNewLine = function() {
     var parent      = this.getParentBlockNode(),
-        currentNode = this.getCurrentBlockNode();
+        currentNode = this.getCurrentBlockNode(),
+        $newElement;
 
 
     if (currentNode.nodeName === 'DIV' && parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
@@ -188,8 +189,9 @@ window.nekland.Editor.prototype.formatNewLine = function() {
         if ($element.get(0).tagName === 'DIV')
         {
             // Create p element without removing child nodes
-            var html        = $element.clone().html(),
-                $newElement = $('<p>').append(html);
+            var html        = $element.clone().html();
+
+            $newElement = $('<p>').append(html);
             // Replace the div with the p element
             $element.replaceWith($newElement);
             // Add a br for not having empty element
@@ -200,7 +202,7 @@ window.nekland.Editor.prototype.formatNewLine = function() {
         // Remove trailing br
         $(currentNode).find('> br').remove();
 
-        var $newElement = $('<p>').html('<br />');
+        $newElement = $('<p>').html('<br />');
         this.insertNodeAtCaret($newElement.get(0));
         //this.setSelection($newElement[0], 0, $newElement[0], 0);
     }
@@ -241,7 +243,7 @@ window.nekland.Editor.prototype.getParentNodeAtCarret = function (tag) {
 
 window.nekland.Editor.prototype.isContainer = function (node) {
     return node.nodeName === 'DIV' && node.className.indexOf('nekland-editor-html') !== -1;
-}
+};
 
 /**
  * Replace the carret at the start
