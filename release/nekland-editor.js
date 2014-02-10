@@ -47,9 +47,10 @@ window.nekland.Editor = function($domElement, _options, _templates) {
 
     // Settings merging
     this.settings = $.extend(true, {}, {
-        mode: 'classical',
-        uid: uniqid(),
-        lang: 'en'
+        mode:    'classical',
+        uid:     uniqid(),
+        lang:    'en',
+        modules: {}
     }, _options);
 
     // Translations loading
@@ -133,14 +134,13 @@ window.nekland.Editor.prototype.execute = function ($button, event) {
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
         if (this.modules[_i].getName() === command) {
             if (this.$editor.is(':visible')) {
-                res = $.proxy(this.modules[_i].execute, this, $button)();
+                res = $.proxy(this.modules[_i].execute, this, $button, this.modules[_i])();
             }
         }
     }
 
     // Firefox fix
     if (this.compatibility('mozilla') && this.$editor.is(':visible')) {
-        console.log ('hi');
         this.$editor.focus();
     }
 
@@ -287,6 +287,10 @@ window.nekland.Editor.prototype.initModules = function() {
 
         this.checkModule(_module);
 
+        if (typeof _module.setOptions === 'function' && this.settings.modules[_module.getName()]) {
+            _module.setOptions(this.settings.modules[_module.getName()]);
+        }
+
         this.modules.push(_module);
     }
 
@@ -349,7 +353,7 @@ window.nekland.Editor.prototype.addModulesEvents = function() {
 
     for (_i = 0, _len = this.modules.length; _i < _len; _i++) {
         if (this.modules[_i].addEvents !== undefined && typeof this.modules[_i].addEvents === 'function') {
-            $.proxy(this.modules[_i].addEvents, this)();
+            $.proxy(this.modules[_i].addEvents, this, this.modules[_i])();
         }
     }
 };
@@ -555,7 +559,7 @@ window.nekland.Editor.prototype.getFocus = function() {
 
 window.nekland.Editor.prototype.saveSelection = function() {
     this.$editor.focus();
-    this.savedSel = this.getOrigin();
+    this.savedSel    = this.getOrigin();
     this.savedSelObj = this.getFocus();
 };
 
@@ -564,31 +568,72 @@ window.nekland.Editor.prototype.saveSelection = function() {
  *
  */
 window.nekland.Editor.prototype.formatNewLine = function() {
-    var parent      = this.getParentNode(),
-        currentNode = this.getCurrentNode();
+    var parent      = this.getParentBlockNode(),
+        currentNode = this.getCurrentBlockNode(),
+        $newElement;
 
-    if (parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
+
+    if (currentNode.nodeName === 'DIV' && parent.nodeName === 'DIV' && parent.className.indexOf('nekland-editor-html') !== -1)
     {
-        var element = $(currentNode);
+        var $element = $(currentNode);
 
-        if (element.get(0).tagName === 'DIV' && (element.html() === '' || element.html() === '<br>'))
+        if ($element.get(0).tagName === 'DIV')
         {
             // Create p element without removing child nodes
-            var newElement = $('<p>').append(element.clone().get(0).childNodes);
+            var html        = $element.clone().html();
+
+            $newElement = $('<p>').append(html);
             // Replace the div with the p element
-            element.replaceWith(newElement);
+            $element.replaceWith($newElement);
             // Add a br for not having empty element
-            newElement.html('<br />');
-            this.setSelection(newElement[0], 0, newElement[0], 0);
+            var $lastElement = $newElement.find('br').parent();
+            this.setSelection($lastElement[0], 0, $lastElement[0], 0);
         }
     } else if (currentNode.tagName === 'DIV' && currentNode.className.indexOf('nekland-editor-html') !== -1) {
         // Remove trailing br
         $(currentNode).find('> br').remove();
 
-        var $newElement = $('<p>').html('<br />');
+        $newElement = $('<p>').html('<br />');
         this.insertNodeAtCaret($newElement.get(0));
         //this.setSelection($newElement[0], 0, $newElement[0], 0);
     }
+};
+
+/**
+ * Note: will bug if usage on broken html
+ *
+ */
+window.nekland.Editor.prototype.getParentBlockNode = function () {
+
+    return $(this.getCurrentBlockNode()).parent()[0];
+};
+
+window.nekland.Editor.prototype.getCurrentBlockNode = function () {
+    var node = this.getCurrentNode();
+
+    while (node.tagName !== 'P' && node.tagName !== 'DIV' && node.tagName !== 'TABLE' && node.tagName !== 'UL') {
+        node = node.parentNode;
+    }
+
+    return node;
+};
+
+window.nekland.Editor.prototype.getParentNodeAtCarret = function (tag) {
+    var node = this.getCurrentNode();
+
+    while (node.tagName !== tag && !this.isContainer(node)) {
+        node = node.parentNode;
+    }
+
+    if (node.tagName === tag) {
+        return node;
+    }
+
+    return false;
+};
+
+window.nekland.Editor.prototype.isContainer = function (node) {
+    return node.nodeName === 'DIV' && node.className.indexOf('nekland-editor-html') !== -1;
 };
 
 /**
@@ -1060,7 +1105,14 @@ window.nekland.lang.editor.en = {
     deleteCurrentColumn: 'delete current column',
     deleteCurrentTable:  'delete current table',
     columnNumber:        'number of columns',
-    rowNumber:           'number of rows'
+    rowNumber:           'number of rows',
+
+    // Image module
+    image:               'image',
+    yourImage:           'your image',
+    insertImage:         'insert the image',
+    addImage:            'add an image'
+
 };
 /**
  * This file is a part of nekland editor package
@@ -1422,6 +1474,7 @@ window.nekland.lang.editor.en = {
         var command  = $button.data('editor-command'),
             removeLi = false,
             $node,
+            node,
             html,
             $p;
 
@@ -1434,22 +1487,31 @@ window.nekland.lang.editor.en = {
         document.execCommand(command);
 
         if (!removeLi) {
-            // Getting the supposed UL
-            $node = $(this.getParentNode());
+            // This is a bugfix while executing new list element
+
+            if (this.compatibility('webkit')) {
+                $node = $(this.getParentNodeAtCarret('LI'));
+
+                $node.find('span, b, i').each(function() {
+                    $(this).removeAttr('style');
+                });
+            }
+
 
             // supposed the "p"
-            $p = $node.parent();
+            $p = this.getParentNodeAtCarret('P');
 
             // if it's really a p
-            if ($p.get(0).tagName === 'P') {
+            if ($p) {
+                $p = $($p);
+                $p.after($p.html());
                 // Add content of the p at the end of $editor
-                this.$editor.append($node);
+                //this.$editor.append($node);
+                this.replaceCarretOn($p.next('ul').find('li'));
                 $p.remove();
-                this.replaceCarretOn($node);
             }
-        }
-        else {
-            var node, text = '';
+        } else {
+            var text = '';
 
             // Getting the supposed text or parent node
             node = this.getRealCurrentNode();

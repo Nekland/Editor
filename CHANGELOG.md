@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.0.4:
+------
+
+**Still alpha version**
+
+New Features:
+* Added image module
+* It's now possible to have options for your module
+
+Bugfix:
+* Fixes for lists
+
 0.0.3:
 ------
 
