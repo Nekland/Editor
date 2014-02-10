@@ -113,10 +113,6 @@
         return true;
     };
 
-    imageModule.prototype.sendImage        = function () {
-
-    };
-
     imageModule.prototype.getName          = function () { return 'image'; };
     imageModule.prototype.getOption        = function (option) { return this.options[option]; };
     imageModule.prototype.setOptions       = function (_options) {
