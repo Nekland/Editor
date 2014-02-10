@@ -11,12 +11,12 @@
     var imageModule = function(translator) {
         this.translator = translator;
         this.options    = {
-            path:      'upload.html',
-            inputName: 'image',
-            method:    'POST', // For compatibility, but should be PUT
-            dataName:  'url'
+            path:          'upload.php',
+            inputName:     'image',
+            method:        'POST', // For compatibility, but should be PUT
+            dataName:      'url',
+            dataErrorName: 'error'
         };
-
     };
 
     imageModule.prototype.getTemplateBefore = function () {
@@ -42,6 +42,7 @@
         tpl += '<div class="modal-body"><div class="row"><div class="col-md-10">';
         tpl += '<label for="image-input">' + this.translator.translate('yourImage', {ucfirst: true}) + '</label>';
         tpl += '<input type="file" class="" name="' + this.options.inputName + '" id="image-input" />';
+        tpl += '<p class="error"></p>';
         tpl += '</div></div>';
 
         // Progress bar
@@ -66,7 +67,9 @@
      *
      */
     imageModule.prototype.addEvents        = function (module) {
+        var self = this;
         $('#image_button').click(function () {
+            self.saveSelection();
             $('#image-modal').modal('show');
         });
     };
@@ -77,7 +80,8 @@
     imageModule.prototype.execute          = function ($button, module) {
         var command      = $button.data('editor-command'),
             $modal       = $('#image-modal'),
-            $progressbar = $modal.find('.progress-bar');
+            $progressbar = $modal.find('.progress-bar'),
+            self         = this;
 
         var xhr = new XMLHttpRequest();
         xhr.open(module.getOption('method'), module.getOption('path'));
@@ -86,19 +90,23 @@
             $progressbar.css('width', (e.total / e.loaded) + '%');
         };
 
-        xhr.onload = function (data) {
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4) {
+                data = JSON.parse(xhr.responseText);
 
-            data = JSON.parse(data);
-            $modal.modal('hide');
-
-            this.replaceSelection();
-
-            document.execCommand('insertHtml', false, '<img src="' + data[module.getOtion('dataName')] + '" alt="" />');
+                if (xhr.status == 200) {
+                    $modal.modal('hide');
+                    self.replaceSelection();
+                    document.execCommand('insertHtml', false, '<img src="' + data[module.getOption('dataName')] + '" alt="Image" /><br />');
+                } else {
+                    $modal.find('.error').html(data[module.getOption('dataErrorName')]);
+                }
+            }
         };
 
 
         var form = new FormData();
-        form.append('file', $modal.find('#image-input').get(0).files[0]);
+        form.append(module.getOption('inputName'), $modal.find('#image-input').get(0).files[0]);
 
         xhr.send(form);
 

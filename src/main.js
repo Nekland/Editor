@@ -61,6 +61,7 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
     if (this.$editor.is(':visible')) {
         // Notice: no need to synchronize since it's done on each keyup
         this.$editor.hide();
+        console.log(this.$domElement.val(), this.clearHtml(this.$domElement.val()));
         this.$domElement.val(this.clearHtml(this.$domElement.val()));
         this.$domElement.show();
 

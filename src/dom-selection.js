@@ -168,8 +168,9 @@ window.nekland.Editor.prototype.getFocus = function() {
 
 window.nekland.Editor.prototype.saveSelection = function() {
     this.$editor.focus();
-    this.savedSel = this.getOrigin();
+    this.savedSel    = this.getOrigin();
     this.savedSelObj = this.getFocus();
+    console.log(this.savedSel, this.savedSelObj);
 };
 
 /**

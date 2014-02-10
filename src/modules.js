@@ -29,8 +29,8 @@ window.nekland.Editor.prototype.initModules = function() {
 
         this.checkModule(_module);
 
-        if (typeof module.setOptions === 'function') {
-            _module.setOptions(this.options.modules[_module.getName()]);
+        if (typeof _module.setOptions === 'function' && this.settings.modules[_module.getName()]) {
+            _module.setOptions(this.settings.modules[_module.getName()]);
         }
 
         this.modules.push(_module);

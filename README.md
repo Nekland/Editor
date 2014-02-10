@@ -48,6 +48,19 @@ grunt
 Compiled files are available in the release directory.
 
 
+Try the demo
+------------
+
+Since there is a picture upload, you should probably test it with PHP. Open your terminal and use the following commands:
+
+```bash
+cd Editor
+php -S localhost:8000
+```
+
+Then go to [http://localhost:8000/demo/](http://localhost:8000/demo/).
+
+
 Test me
 -------
 
@@ -58,3 +71,4 @@ Then just launch like that:
 ```bash
 ./test.sh all
 ```
+
