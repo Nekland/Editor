@@ -96,8 +96,17 @@
 
                 if (xhr.status == 200) {
                     $modal.modal('hide');
-                    self.replaceSelection();
-                    document.execCommand('insertHtml', false, '<img src="' + data[module.getOption('dataName')] + '" alt="Image" /><br />');
+                    
+                    // Creating the image element
+                    var anImage = document.createElement('img');
+                    anImage.setAttribute('src', data[module.getOption('dataName')]);
+                    anImage.setAttribute('alt', 'an image');
+
+                    // Inserting the image in the container
+                    var range = window.getSelection().getRangeAt(0);
+                    range.deleteContents();
+                    range.insertNode(anImage);
+                    
                 } else {
                     $modal.find('.error').html(data[module.getOption('dataErrorName')]);
                 }
