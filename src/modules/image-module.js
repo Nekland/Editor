@@ -98,15 +98,15 @@
                     $modal.modal('hide');
                     
                     // Creating the image element
-                    var anImage = document.createElement('img');
-                    anImage.setAttribute('src', data[module.getOption('dataName')]);
-                    anImage.setAttribute('alt', 'an image');
+                    var imageElement = document.createElement('img');                    
+                    imageElement.setAttribute('src', data[module.getOption('dataName')]);
+                    imageElement.setAttribute('alt', 'an image');
 
                     // Inserting the image in the container
                     var range = window.getSelection().getRangeAt(0);
                     range.deleteContents();
-                    range.insertNode(anImage);
-                    
+                    range.insertNode(imageElement);
+
                 } else {
                     $modal.find('.error').html(data[module.getOption('dataErrorName')]);
                 }

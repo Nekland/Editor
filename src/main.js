@@ -59,7 +59,9 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
 
     // WYSIWYG to html
     if (this.$editor.is(':visible')) {
-        // Notice: no need to synchronize since it's done on each keyup
+        // Even if synchronized on each keyup, we need to synch if there is no key pressed after the addition of an element
+        this.synchronize();
+        
         this.$editor.hide();
         this.$domElement.val(this.clearHtml(this.$domElement.val()));
         this.$domElement.show();
