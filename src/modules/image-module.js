@@ -39,18 +39,19 @@
             + '</span></span>',
             $body = $('body');
         var active     = false,
-            position   = $img.position(),
+            position   = {},
+            dim        = {},
+            directions = {},
+            originalSize;
+        
+        this.activateImageResize = function () {
+            // Initialize basic vars
+            position   = $img.position();
             dim        = {
                 width:  $img.width(),
                 height: $img.height()
-            },
-            directions = {
-                height: null,
-                width: null
-            },
+            };
             originalSize = $.extend({}, dim);
-        
-        this.activateImageResize = function () {
 
             // Initialization of the resizer
             $img.after(resizeTemplate);
