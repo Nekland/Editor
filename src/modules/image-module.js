@@ -26,27 +26,46 @@
     var ImageResizer = function($img) {
         // Notice: the classes in the templates are usefull to the good
         // code execution, see the mousedown event on nekland-resize
-        var resizeTemplate = 
-            '<span id="nekland-resize"><img src="'+$img.attr('src')+'" /><span class="resize-layout">'
-            + '<span class="resize-top"></span>'
-            + '<span class="resize-bottom"></span>'
-            + '<span class="resize-left"></span>'
-            + '<span class="resize-right"></span>'
-            + '<span class="resize-top-left"></span>'
-            + '<span class="resize-top-right"></span>'
-            + '<span class="resize-bottom-left"></span>'
-            + '<span class="resize-bottom-right"></span>'
-            + '</span></span>',
-            $body = $('body');
+        var resizeTemplate =  '<span id="nekland-resize"><img src="'+$img.attr('src')+'" /><span class="resize-layout">';
+        resizeTemplate += '<span class="resize-top"></span>';
+        resizeTemplate += '<span class="resize-bottom"></span>';
+        resizeTemplate += '<span class="resize-left"></span>';
+        resizeTemplate += '<span class="resize-right"></span>';
+        resizeTemplate += '<span class="resize-top-left"></span>';
+        resizeTemplate += '<span class="resize-top-right"></span>';
+        resizeTemplate += '<span class="resize-bottom-left"></span>';
+        resizeTemplate += '<span class="resize-bottom-right"></span>';
+        resizeTemplate += '</span></span>';
+
         var active     = false,
             position   = {},
             dim        = {},
             directions = {},
-            originalSize;
+            originalSize,
+            $body = $('body');
+
+
+        /**
+         * Awesome method that gets the real position of an object
+         * (not like the position method of jQuery)
+         */
+        function findPos(obj) {
+            var curleft = curtop = 0;
+            if (obj.offsetParent) {
+                do {
+                    curleft += obj.offsetLeft;
+                    curtop += obj.offsetTop;
+                } while (obj = obj.offsetParent);
+
+                return  {left: curleft,top: curtop};
+            }
+            return null;
+        }
         
         this.activateImageResize = function () {
+            
             // Initialize basic vars
-            position   = $img.position();
+            position   = findPos($img[0]) || $img.position();
             dim        = {
                 width:  $img.width(),
                 height: $img.height()
@@ -62,11 +81,12 @@
 
             console.log($neklandResize.html());
 
+
+
             // Events definition
             function onMoveAction(e) {
                 if (active) {
-                    var $this = $(this),
-                        dims  = $.extend({}, originalSize);
+                    var dims  = $.extend({}, originalSize);
 
                     if (directions.right) {
                         dims.width = e.pageX - position.left;
@@ -77,6 +97,7 @@
                     if (directions.top) {
                         dims.height = position.top - e.pageY + dims.height;
                     } else if (directions.bottom) {
+                        console.log(e.pageY, position.top);
                         dims.height = e.pageY - position.top;
                     }
 
@@ -90,6 +111,7 @@
                         }
                     }
 
+                    console.log(dims);
                     $neklandResize.css({
                         width: dims.width,
                         height: dims.height
@@ -97,13 +119,12 @@
                 }
             }
             function awesomeMouseUp() {
-                var $this = $(this);
                 active = false;
                 $('body').unbind('mousemove', onMoveAction);
 
                 originalSize = {
-                    width: $this.width(),
-                    height: $this.height()
+                    width: $neklandResize.width(),
+                    height: $neklandResize.height()
                 };
             }
             function terminateResizer(event) {
