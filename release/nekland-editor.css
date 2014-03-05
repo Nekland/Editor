@@ -56,13 +56,11 @@ a.nekland-editor-formath5 {
 #nekland-resize .resize-top, #nekland-resize .resize-bottom {
     height: 5px;
     width: 100%;
-    background: yellow;
     cursor: ns-resize;
 }
 #nekland-resize .resize-left, #nekland-resize .resize-right {
     height: 100%;
     width: 5px;
-    background: green;
     cursor: ew-resize;
 }
 #nekland-resize .resize-top-left,
@@ -71,7 +69,6 @@ a.nekland-editor-formath5 {
 #nekland-resize .resize-bottom-right {
     height: 5px;
     width: 5px;
-    background: cyan;
 }
 #nekland-resize .resize-top { top: 0; left: 0; }
 #nekland-resize .resize-bottom { bottom: 0; left: 0; }
