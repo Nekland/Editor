@@ -54,11 +54,13 @@
             originalSize = $.extend({}, dim);
 
             // Initialization of the resizer
+            console.log(resizeTemplate, $img);
             $img.after(resizeTemplate);
             $neklandResize = $('#nekland-resize');
             $neklandResize.css(dim);
             $img.hide();
 
+            console.log($neklandResize.html());
 
             // Events definition
             function onMoveAction(e) {
@@ -104,7 +106,10 @@
                     height: $this.height()
                 };
             }
-            function terminateResizer() {
+            function terminateResizer(event) {
+                if (event.target.isSameNode($img[0])) {
+                    return;
+                }
                 $img.css({
                     width:  $neklandResize.width(),
                     height: $neklandResize.height()
@@ -160,7 +165,7 @@
             $body.bind('mouseup', awesomeMouseUp);
             $body.click(terminateResizer);
 
-        }
+        };
 
         $img.click(this.activateImageResize);
     };

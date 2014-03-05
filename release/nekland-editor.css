@@ -79,7 +79,7 @@ a.nekland-editor-formath5 {
 #nekland-resize .resize-top { top: 0; left: 0; }
 #nekland-resize .resize-bottom { bottom: 0; left: 0; }
 #nekland-resize .resize-left {top: 0; left: 0;}
-#nekland-resize.resize-right {top: 0; right: 0;}
+#nekland-resize .resize-right {top: 0; right: 0;}
 
 #nekland-resize .resize-top-left { top: 0; left: 0; cursor: nw-resize; }
 #nekland-resize .resize-top-right { top: 0; right: 0; cursor: ne-resize; }
