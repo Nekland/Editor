@@ -73,15 +73,10 @@
             originalSize = $.extend({}, dim);
 
             // Initialization of the resizer
-            console.log(resizeTemplate, $img);
             $img.after(resizeTemplate);
             $neklandResize = $('#nekland-resize');
             $neklandResize.css(dim);
             $img.hide();
-
-            console.log($neklandResize.html());
-
-
 
             // Events definition
             function onMoveAction(e) {
@@ -97,7 +92,6 @@
                     if (directions.top) {
                         dims.height = position.top - e.pageY + dims.height;
                     } else if (directions.bottom) {
-                        console.log(e.pageY, position.top);
                         dims.height = e.pageY - position.top;
                     }
 
@@ -111,7 +105,6 @@
                         }
                     }
 
-                    console.log(dims);
                     $neklandResize.css({
                         width: dims.width,
                         height: dims.height
