@@ -1,11 +1,12 @@
 CONTRIBUTORS
 ============
 
-For now, there is no real contributor.
+* Nek (Maxime Veber, Lead Developper)
+* Valanz (Valentin Menardie, Awesome Front Developer)
 
 
 Thanks
 ------
 
-*  Nami-doc for code review
-*  Aryelle for logo :D
+* Nami-doc for code review
+* Shine-neko for code review

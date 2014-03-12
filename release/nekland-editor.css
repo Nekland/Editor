@@ -54,21 +54,22 @@ a.nekland-editor-formath5 {
 
 }
 #nekland-resize .resize-top, #nekland-resize .resize-bottom {
-    height: 5px;
+    height: 7px;
     width: 100%;
     cursor: ns-resize;
 }
 #nekland-resize .resize-left, #nekland-resize .resize-right {
     height: 100%;
-    width: 5px;
+    width: 7px;
     cursor: ew-resize;
 }
 #nekland-resize .resize-top-left,
 #nekland-resize .resize-top-right,
 #nekland-resize .resize-bottom-left,
 #nekland-resize .resize-bottom-right {
-    height: 5px;
-    width: 5px;
+    height: 7px;
+    width: 7px;
+    background: #000000;
 }
 #nekland-resize .resize-top { top: 0; left: 0; }
 #nekland-resize .resize-bottom { bottom: 0; left: 0; }
