@@ -26,6 +26,57 @@ a.nekland-editor-formath5 {
     height: 35px;
 }
 
-.nekland-editor-html {
-	overflow: auto;
+
+/**********************
+**    RESIZER STYLE
+***********************/
+
+
+#nekland-resize, #nekland-resize span {
+    display: block;
 }
+#nekland-resize {
+    position: relative;
+}
+#nekland-resize img, #nekland-resize .resize-layout {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: block;
+}
+#nekland-resize .resize-layout {
+    background: #888888;
+    opacity: 0.7;
+}
+
+#nekland-resize .resize-layout span {
+    position: absolute;
+
+}
+#nekland-resize .resize-top, #nekland-resize .resize-bottom {
+    height: 7px;
+    width: 100%;
+    cursor: ns-resize;
+}
+#nekland-resize .resize-left, #nekland-resize .resize-right {
+    height: 100%;
+    width: 7px;
+    cursor: ew-resize;
+}
+#nekland-resize .resize-top-left,
+#nekland-resize .resize-top-right,
+#nekland-resize .resize-bottom-left,
+#nekland-resize .resize-bottom-right {
+    height: 7px;
+    width: 7px;
+    background: #000000;
+}
+#nekland-resize .resize-top { top: 0; left: 0; }
+#nekland-resize .resize-bottom { bottom: 0; left: 0; }
+#nekland-resize .resize-left {top: 0; left: 0;}
+#nekland-resize .resize-right {top: 0; right: 0;}
+
+#nekland-resize .resize-top-left { top: 0; left: 0; cursor: nw-resize; }
+#nekland-resize .resize-top-right { top: 0; right: 0; cursor: ne-resize; }
+#nekland-resize .resize-bottom-left { bottom: 0; left: 0; cursor: sw-resize; }
+#nekland-resize .resize-bottom-right { bottom: 0; right: 0; cursor: se-resize; }

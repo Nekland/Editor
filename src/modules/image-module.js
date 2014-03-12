@@ -19,6 +19,171 @@
         };
     };
 
+    /**
+     * Class that is able to setup a resize-layer upon a jQuery image object
+     * and handle all the resize process automatically
+     */
+    var ImageResizer = function($img) {
+        // Notice: the classes in the templates are usefull to the good
+        // code execution, see the mousedown event on nekland-resize
+        var resizeTemplate =  '<span id="nekland-resize"><img src="'+$img.attr('src')+'" /><span class="resize-layout">';
+        resizeTemplate += '<span class="resize-top"></span>';
+        resizeTemplate += '<span class="resize-bottom"></span>';
+        resizeTemplate += '<span class="resize-left"></span>';
+        resizeTemplate += '<span class="resize-right"></span>';
+        resizeTemplate += '<span class="resize-top-left"></span>';
+        resizeTemplate += '<span class="resize-top-right"></span>';
+        resizeTemplate += '<span class="resize-bottom-left"></span>';
+        resizeTemplate += '<span class="resize-bottom-right"></span>';
+        resizeTemplate += '</span></span>';
+
+        var active     = false,
+            position   = {},
+            dim        = {},
+            directions = {},
+            originalSize,
+            $body = $('body');
+
+
+        /**
+         * Awesome method that gets the real position of an object
+         * (not like the position method of jQuery)
+         */
+        function findPos(obj) {
+            var curleft = curtop = 0;
+            if (obj.offsetParent) {
+                do {
+                    curleft += obj.offsetLeft;
+                    curtop += obj.offsetTop;
+                } while (obj = obj.offsetParent);
+
+                return  {left: curleft,top: curtop};
+            }
+            return null;
+        }
+        
+        this.activateImageResize = function () {
+            
+            // Initialize basic vars
+            position   = findPos($img[0]) || $img.position();
+            dim        = {
+                width:  $img.width(),
+                height: $img.height()
+            };
+            originalSize = $.extend({}, dim);
+
+            // Initialization of the resizer
+            $img.after(resizeTemplate);
+            $neklandResize = $('#nekland-resize');
+            $neklandResize.css(dim);
+            $img.hide();
+
+            // Events definition
+            function onMoveAction(e) {
+                if (active) {
+                    var dims  = $.extend({}, originalSize);
+
+                    if (directions.right) {
+                        dims.width = e.pageX - position.left;
+                    } else if (directions.left) {
+                        dims.width = (position.left - e.pageX) + dims.width;
+                    }
+
+                    if (directions.top) {
+                        dims.height = position.top - e.pageY + dims.height;
+                    } else if (directions.bottom) {
+                        dims.height = e.pageY - position.top;
+                    }
+
+                    if ((directions.top && (directions.left || directions.right)) || (directions.bottom && (directions.left || directions.right))) {
+                        // We should make something a bit more beatiful using the ratio
+                        var ratioA = originalSize.width / originalSize.height,
+                            ratioB = dims.width / dims.height;
+
+                        if (ratioA !== ratioB) {
+                            dims.width = (dims.height/originalSize.height) * originalSize.width;
+                        }
+                    }
+
+                    $neklandResize.css({
+                        width: dims.width,
+                        height: dims.height
+                    });
+                }
+            }
+            function awesomeMouseUp() {
+                active = false;
+                $('body').unbind('mousemove', onMoveAction);
+
+                originalSize = {
+                    width: $neklandResize.width(),
+                    height: $neklandResize.height()
+                };
+            }
+            function terminateResizer(event) {
+                if (event.target.isSameNode($img[0])) {
+                    return;
+                }
+                $img.css({
+                    width:  $neklandResize.width(),
+                    height: $neklandResize.height()
+                });
+                $neklandResize.remove();
+                $img.show();
+                $body.unbind('mouseup', awesomeMouseUp);
+                $body.unbind('click', terminateResizer);
+            }
+
+            $neklandResize.mousedown(function(e) {
+                // enable the drag
+                var $target = $(e.target);
+
+                switch ($target.attr('class')) {
+                    case 'resize-top':
+                        directions.top = true;
+                        break;
+                    case 'resize-bottom':
+                        directions.bottom = true;
+                        break;
+                    case 'resize-right':
+                        directions.right = true;
+                        break;
+                    case 'resize-left':
+                        directions.left = true;
+                        break;
+
+                    case 'resize-top-left':
+                        directions.top  = true;
+                        directions.left = true;
+                        break;
+                    case 'resize-top-right':
+                        directions.top   = true;
+                        directions.right = true;
+                        break;
+                    case 'resize-bottom-left':
+                        directions.bottom = true;
+                        directions.left   = true;
+                        break;
+                    case 'resize-bottom-right':
+                        directions.bottom = true;
+                        directions.right  = true;
+                        break;
+                }
+
+                $body.bind('mousemove', onMoveAction);
+                active = true;
+
+                return false;
+            });
+
+            $body.bind('mouseup', awesomeMouseUp);
+            $body.click(terminateResizer);
+
+        };
+
+        $img.click(this.activateImageResize);
+    };
+
     imageModule.prototype.getTemplateBefore = function () {
         var tpl =  '<a class="btn btn-default" id="image_button" href="javascript:;">' +
             this.translator.translate('image', {
@@ -106,6 +271,9 @@
                     var range = window.getSelection().getRangeAt(0);
                     range.deleteContents();
                     range.insertNode(imageElement);
+
+                    var $image = $(imageElement);
+                    $image.data('resizer', new ImageResizer($image));
 
                 } else {
                     $modal.find('.error').html(data[module.getOption('dataErrorName')]);
