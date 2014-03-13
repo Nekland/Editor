@@ -121,7 +121,7 @@
                 };
             }
             function terminateResizer(event) {
-                if (event.target.isSameNode($img[0])) {
+                if (event.target === $img[0]) {
                     return;
                 }
                 $img.css({

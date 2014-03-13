@@ -62,6 +62,8 @@ window.nekland.Editor.prototype.switchEditor = function($switcher) {
         // Even if synchronized on each keyup, we need to synch if there is no key pressed after the addition of an element
         this.synchronize();
         
+        this.$domElement.css('height', this.$editor.css('height'));
+
         this.$editor.hide();
         this.$domElement.val(this.clearHtml(this.$domElement.val()));
         this.$domElement.show();
