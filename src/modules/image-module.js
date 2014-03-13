@@ -273,6 +273,7 @@
                     range.insertNode(imageElement);
 
                     var $image = $(imageElement);
+                    $image.css('width', self.$editor.width()/2);
                     $image.data('resizer', new ImageResizer($image));
 
                 } else {
