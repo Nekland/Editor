@@ -4,7 +4,7 @@ Nekland Editor
 [![Gitter chat](https://badges.gitter.im/Nekland/Editor.png)](https://gitter.im/Nekland/Editor)
 
 Warning: This script is currently in hard-development (in facts, you can talk about "heavy dev").
-![Nekland Editor Logo](https://raw.github.com/Nekland/Editor/master/logo.png)
+![Nekland Editor Logo](https://d13yacurqjgara.cloudfront.net/users/38858/screenshots/1447172/editor-logo.png)
 
 Why the fuck dev one more WYSIWYG ?
 -----------------------------------
